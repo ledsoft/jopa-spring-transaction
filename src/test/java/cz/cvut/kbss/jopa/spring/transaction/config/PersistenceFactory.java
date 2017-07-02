@@ -36,6 +36,7 @@ public class PersistenceFactory {
         final Map<String, String> properties = new HashMap<>();
         properties.put(OntoDriverProperties.ONTOLOGY_LANGUAGE, "en");
         properties.put(JOPAPersistenceProperties.SCAN_PACKAGE, "cz.cvut.kbss.jopa.spring.model");
+        properties.put(JOPAPersistenceProperties.CACHE_ENABLED, Boolean.FALSE.toString());
         properties.put(SesameOntoDriverProperties.SESAME_USE_VOLATILE_STORAGE, Boolean.TRUE.toString());
         properties.put(JOPAPersistenceProperties.JPA_PERSISTENCE_PROVIDER, JOPAPersistenceProvider.class.getName());
         properties.put(JOPAPersistenceProperties.ONTOLOGY_PHYSICAL_URI_KEY, "test-repository");

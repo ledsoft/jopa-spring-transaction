@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TransactionProxyFactoryTest {
+public class TransactionObjectFactoryTest {
 
     private TransactionObjectFactory factory = new TransactionObjectFactory();
 

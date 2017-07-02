@@ -3,6 +3,7 @@ package cz.cvut.kbss.jopa.spring.transaction.model;
 import cz.cvut.kbss.jopa.model.annotations.*;
 
 import java.net.URI;
+import java.util.HashSet;
 import java.util.Set;
 
 @Namespace(prefix = "ex", namespace = "http://www.example.org/")
@@ -18,6 +19,14 @@ public class Person {
 
     @OWLObjectProperty(iri = "ex:hasPhone", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Phone> phones;
+
+    public Person() {
+    }
+
+    public Person(String name) {
+        this.name = name;
+        this.uri = URI.create("http://www.example.org/" + name.replace(" ", "+"));
+    }
 
     public URI getUri() {
         return uri;
@@ -41,6 +50,13 @@ public class Person {
 
     public void setPhones(Set<Phone> phones) {
         this.phones = phones;
+    }
+
+    public void addPhone(Phone phone) {
+        if (phones == null) {
+            this.phones = new HashSet<>();
+        }
+        phones.add(phone);
     }
 
     @Override
