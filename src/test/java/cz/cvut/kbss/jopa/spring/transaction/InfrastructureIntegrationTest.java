@@ -1,7 +1,7 @@
-package cz.cvut.kbss.jopa.spring;
+package cz.cvut.kbss.jopa.spring.transaction;
 
 import cz.cvut.kbss.jopa.model.EntityManager;
-import cz.cvut.kbss.jopa.spring.config.PersistenceConfig;
+import cz.cvut.kbss.jopa.spring.transaction.config.PersistenceConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

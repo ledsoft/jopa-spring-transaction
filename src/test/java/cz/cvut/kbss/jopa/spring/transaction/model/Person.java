@@ -1,4 +1,4 @@
-package cz.cvut.kbss.jopa.spring.model;
+package cz.cvut.kbss.jopa.spring.transaction.model;
 
 import cz.cvut.kbss.jopa.model.annotations.*;
 

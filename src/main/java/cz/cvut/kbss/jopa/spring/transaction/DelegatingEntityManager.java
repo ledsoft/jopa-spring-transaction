@@ -1,4 +1,4 @@
-package cz.cvut.kbss.jopa.spring;
+package cz.cvut.kbss.jopa.spring.transaction;
 
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
@@ -6,6 +6,7 @@ import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
 import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
 import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
+import cz.cvut.kbss.jopa.spring.exception.TransactionMissingException;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 
 import java.net.URI;
@@ -28,7 +29,7 @@ public class DelegatingEntityManager implements EntityManager {
         if (currentTransaction == null) {
             throw new TransactionMissingException("Expected transaction, but found none.");
         }
-        return currentTransaction.getDelegate();
+        return currentTransaction.getTransactionEntityManager();
     }
 
     @Override
@@ -183,5 +184,16 @@ public class DelegatingEntityManager implements EntityManager {
 
     void setLocalTransaction(JopaTransactionDefinition transaction) {
         localTransaction.set(transaction);
+    }
+
+    JopaTransactionDefinition getLocalTransaction() {
+        return localTransaction.get();
+    }
+
+    /**
+     * Removes the transaction object bound to the current thread.
+     */
+    void clearLocalTransaction() {
+        localTransaction.remove();
     }
 }

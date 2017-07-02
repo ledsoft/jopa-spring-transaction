@@ -1,11 +1,11 @@
-package cz.cvut.kbss.jopa.spring;
+package cz.cvut.kbss.jopa.spring.exception;
 
 /**
  * Thrown when transaction was expected to be running but was not.
  */
 public class TransactionMissingException extends RuntimeException {
 
-    TransactionMissingException(String message) {
+    public TransactionMissingException(String message) {
         super(message);
     }
 }

@@ -1,11 +1,11 @@
-package cz.cvut.kbss.jopa.spring.config;
+package cz.cvut.kbss.jopa.spring.transaction.config;
 
 import cz.cvut.kbss.jopa.Persistence;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.JOPAPersistenceProperties;
 import cz.cvut.kbss.jopa.model.JOPAPersistenceProvider;
-import cz.cvut.kbss.jopa.spring.DelegatingEntityManager;
+import cz.cvut.kbss.jopa.spring.transaction.DelegatingEntityManager;
 import cz.cvut.kbss.ontodriver.config.OntoDriverProperties;
 import cz.cvut.kbss.ontodriver.sesame.config.SesameOntoDriverProperties;
 import org.springframework.context.annotation.Bean;
