@@ -16,11 +16,14 @@ moments of the transaction lifecycle (begin, commit etc.),
 where it delegates calls to the `EntityManager` instance bound to the current transaction. This is the only class with
 which the end users directly interact.
 
+Do not forget to `EnableTransactionManagement`.
+
 Assuming there is an `EntityManagerFactory` Spring bean, Java-based configuration of the aforementioned beans looks 
 for example as follows:
 
 ```java
 @Configuration
+@EnableTransactionManagement
 @Import(PersistenceFactory.class)
 public class PersistenceConfig {
 
