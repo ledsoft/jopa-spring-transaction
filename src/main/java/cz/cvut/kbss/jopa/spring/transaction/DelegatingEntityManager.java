@@ -8,6 +8,7 @@ import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
 import cz.cvut.kbss.jopa.spring.exception.TransactionMissingException;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
+import org.springframework.beans.factory.DisposableBean;
 
 import java.net.URI;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Delegates calls to an {@link EntityManager} instance associated with the current thread.
  */
-public class DelegatingEntityManager implements EntityManager {
+public class DelegatingEntityManager implements DisposableBean, EntityManager {
 
     private final ThreadLocal<JopaTransactionDefinition> localTransaction = new ThreadLocal<>();
 
@@ -195,5 +196,12 @@ public class DelegatingEntityManager implements EntityManager {
      */
     void clearLocalTransaction() {
         localTransaction.remove();
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        if (localTransaction.get() != null) {
+            localTransaction.get().getTransactionEntityManager().close();
+        }
     }
 }

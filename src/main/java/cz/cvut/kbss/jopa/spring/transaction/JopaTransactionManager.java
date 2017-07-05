@@ -81,6 +81,9 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 
     @Override
     protected void doCleanupAfterCompletion(Object transaction) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Closing transactional EntityManager.");
+        }
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         emProxy.clearLocalTransaction();
         txObject.getTransactionEntityManager().close();

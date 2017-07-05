@@ -26,6 +26,7 @@ public class TransactionalBehaviorTest {
     private EntityManager em;
 
     @Test
+    @Transactional("txManager")
     public void transactionalMethodPersistsData() throws Exception {
         final Person p = new Person("Catherine Halsey");
         p.addPhone(new Phone("123 456 789"));
@@ -34,7 +35,6 @@ public class TransactionalBehaviorTest {
         verifyData(p);
     }
 
-    @Transactional("txManager")
     private void persist(Person data) {
         em.persist(data);
     }
