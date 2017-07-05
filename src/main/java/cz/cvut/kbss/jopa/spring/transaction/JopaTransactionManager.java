@@ -12,8 +12,8 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 /**
  * Integrates JOPA transactions into the Spring transactional management.
  * <p>
- * This class manages instances representing transactions and propagates important events in the transaction lifecycle to JOPA,
- * while the transaction lifecycle itself is managed by Spring.
+ * This class manages instances representing transactions and propagates important events in the transaction lifecycle
+ * to JOPA, while the transaction lifecycle itself is managed by Spring.
  */
 public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 

@@ -8,7 +8,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  * <p>
  * It inherits default transaction attributes from the {@link DefaultTransactionDefinition}.
  * <p>
- * Wraps the transactional {@link EntityManager} (if representing an existing).
+ * Wraps the transactional {@link EntityManager} (if representing an existing transaction).
  */
 public class JopaTransactionDefinition extends DefaultTransactionDefinition {
 

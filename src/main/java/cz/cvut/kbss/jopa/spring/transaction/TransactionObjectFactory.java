@@ -1,7 +1,9 @@
 package cz.cvut.kbss.jopa.spring.transaction;
 
+/**
+ * Builds transaction representing objects.
+ */
 class TransactionObjectFactory {
-
 
     /**
      * Creates a new (default) transaction object.
