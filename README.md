@@ -48,7 +48,8 @@ as it is closely tied to JPA):
 private EntityManager em;
 ```
 
-See the tests for a complete setup example.
+The tests contain a complete setup. For a fully operational example, see 
+[JOPA Example 04 - JOPA + Spring](https://github.com/kbss-cvut/jopa-examples/tree/master/example04-jopa-spring).
 
 ## Getting the Library
 
