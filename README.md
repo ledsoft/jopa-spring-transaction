@@ -41,7 +41,7 @@ public class PersistenceConfig {
 ```
 
 `EntityManager` is then injected into beans using `Autowired` or `Inject` (`PersistenceContext` is currently not supported,
-as it is closely tied to JPA.):
+as it is closely tied to JPA):
 
 ```
 @Autowired

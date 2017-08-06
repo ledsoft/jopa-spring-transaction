@@ -2,8 +2,6 @@ package com.github.ledsoft.jopa.spring.transaction;
 
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
@@ -16,8 +14,6 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
  * to JOPA, while the transaction lifecycle itself is managed by Spring.
  */
 public class JopaTransactionManager extends AbstractPlatformTransactionManager {
-
-    private static final Logger LOG = LoggerFactory.getLogger(JopaTransactionManager.class);
 
     private final EntityManagerFactory emf;
 
@@ -44,14 +40,14 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
                                                                                             TransactionException {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         if (!txObject.isExisting()) {
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Creating new transactional EntityManager.");
+            if (logger.isTraceEnabled()) {
+                logger.trace("Creating new transactional EntityManager.");
             }
             final EntityManager em = emf.createEntityManager();
             txObject.setTransactionEntityManager(em);
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Starting transaction and binding EntityManager to the current thread.");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Starting transaction and binding EntityManager to the current thread.");
         }
         final EntityManager em = txObject.getTransactionEntityManager();
         em.getTransaction().begin();
@@ -61,8 +57,8 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 
     @Override
     protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Commencing transaction commit.");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Commencing transaction commit.");
         }
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) status.getTransaction();
         final EntityManager em = txObject.getTransactionEntityManager();
@@ -71,8 +67,8 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 
     @Override
     protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Commencing transaction rollback.");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Commencing transaction rollback.");
         }
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) status.getTransaction();
         final EntityManager em = txObject.getTransactionEntityManager();
@@ -81,8 +77,8 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 
     @Override
     protected void doCleanupAfterCompletion(Object transaction) {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Closing transactional EntityManager.");
+        if (logger.isTraceEnabled()) {
+            logger.trace("Closing transactional EntityManager.");
         }
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         emProxy.clearLocalTransaction();
