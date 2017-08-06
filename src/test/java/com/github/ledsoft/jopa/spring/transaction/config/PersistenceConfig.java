@@ -1,8 +1,8 @@
-package cz.cvut.kbss.jopa.spring.transaction.config;
+package com.github.ledsoft.jopa.spring.transaction.config;
 
+import com.github.ledsoft.jopa.spring.transaction.DelegatingEntityManager;
+import com.github.ledsoft.jopa.spring.transaction.JopaTransactionManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
-import cz.cvut.kbss.jopa.spring.transaction.DelegatingEntityManager;
-import cz.cvut.kbss.jopa.spring.transaction.JopaTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

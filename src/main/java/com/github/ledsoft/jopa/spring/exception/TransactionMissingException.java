@@ -1,4 +1,4 @@
-package cz.cvut.kbss.jopa.spring.exception;
+package com.github.ledsoft.jopa.spring.exception;
 
 /**
  * Thrown when transaction was expected to be running but was not.

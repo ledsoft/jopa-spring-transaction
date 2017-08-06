@@ -1,4 +1,4 @@
-package cz.cvut.kbss.jopa.spring.transaction.model;
+package com.github.ledsoft.jopa.spring.transaction.model;
 
 import cz.cvut.kbss.jopa.model.annotations.Id;
 import cz.cvut.kbss.jopa.model.annotations.Namespace;

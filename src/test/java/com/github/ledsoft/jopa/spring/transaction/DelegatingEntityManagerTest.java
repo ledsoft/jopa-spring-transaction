@@ -1,8 +1,8 @@
-package cz.cvut.kbss.jopa.spring.transaction;
+package com.github.ledsoft.jopa.spring.transaction;
 
+import com.github.ledsoft.jopa.spring.exception.TransactionMissingException;
+import com.github.ledsoft.jopa.spring.transaction.model.Person;
 import cz.cvut.kbss.jopa.model.EntityManager;
-import cz.cvut.kbss.jopa.spring.exception.TransactionMissingException;
-import cz.cvut.kbss.jopa.spring.transaction.model.Person;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

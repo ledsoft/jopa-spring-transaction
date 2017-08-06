@@ -1,9 +1,10 @@
-package cz.cvut.kbss.jopa.spring.transaction;
+package com.github.ledsoft.jopa.spring.transaction;
 
+import com.github.ledsoft.jopa.spring.transaction.config.PersistenceConfig;
+import com.github.ledsoft.jopa.spring.transaction.model.Person;
+import com.github.ledsoft.jopa.spring.transaction.model.Phone;
 import cz.cvut.kbss.jopa.model.EntityManager;
-import cz.cvut.kbss.jopa.spring.transaction.config.PersistenceConfig;
-import cz.cvut.kbss.jopa.spring.transaction.model.Person;
-import cz.cvut.kbss.jopa.spring.transaction.model.Phone;
+import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistenceConfig.class})
@@ -44,5 +44,24 @@ public class TransactionalBehaviorTest {
         assertNotNull(result);
         assertEquals(p.getName(), result.getName());
         assertEquals(p.getPhones(), result.getPhones());
+    }
+
+    @Test
+    @Transactional("txManager")
+    public void transactionPropagatesToAnotherTransactionalMethod() {
+        final Person p = new Person("Catherine Halsey");
+        em.persist(p);
+        final EntityTransaction currentTransaction = em.getTransaction();
+        final Person p2 = transactionalPersist(currentTransaction);
+        verifyData(p);
+        verifyData(p2);
+    }
+
+    @Transactional("txManager")
+    public Person transactionalPersist(EntityTransaction transactionObject) {
+        assertSame(transactionObject, em.getTransaction());
+        final Person p2 = new Person("Thomas Lasky");
+        em.persist(p2);
+        return p2;
     }
 }

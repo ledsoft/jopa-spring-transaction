@@ -1,4 +1,4 @@
-package cz.cvut.kbss.jopa.spring.transaction;
+package com.github.ledsoft.jopa.spring.transaction;
 
 import org.junit.Test;
 

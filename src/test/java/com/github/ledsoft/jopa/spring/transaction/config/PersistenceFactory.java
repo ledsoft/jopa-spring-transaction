@@ -1,11 +1,11 @@
-package cz.cvut.kbss.jopa.spring.transaction.config;
+package com.github.ledsoft.jopa.spring.transaction.config;
 
+import com.github.ledsoft.jopa.spring.transaction.DelegatingEntityManager;
 import cz.cvut.kbss.jopa.Persistence;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.JOPAPersistenceProperties;
 import cz.cvut.kbss.jopa.model.JOPAPersistenceProvider;
-import cz.cvut.kbss.jopa.spring.transaction.DelegatingEntityManager;
 import cz.cvut.kbss.ontodriver.config.OntoDriverProperties;
 import cz.cvut.kbss.ontodriver.sesame.config.SesameOntoDriverProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +35,7 @@ public class PersistenceFactory {
     private void init() {
         final Map<String, String> properties = new HashMap<>();
         properties.put(OntoDriverProperties.ONTOLOGY_LANGUAGE, "en");
-        properties.put(JOPAPersistenceProperties.SCAN_PACKAGE, "cz.cvut.kbss.jopa.spring.transaction.model");
+        properties.put(JOPAPersistenceProperties.SCAN_PACKAGE, "com.github.ledsoft.jopa.spring.transaction.model");
         properties.put(JOPAPersistenceProperties.CACHE_ENABLED, Boolean.FALSE.toString());
         properties.put(SesameOntoDriverProperties.SESAME_USE_VOLATILE_STORAGE, Boolean.TRUE.toString());
         properties.put(JOPAPersistenceProperties.JPA_PERSISTENCE_PROVIDER, JOPAPersistenceProvider.class.getName());

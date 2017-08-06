@@ -1,4 +1,4 @@
-package cz.cvut.kbss.jopa.spring.transaction;
+package com.github.ledsoft.jopa.spring.transaction;
 
 import cz.cvut.kbss.jopa.model.EntityManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;

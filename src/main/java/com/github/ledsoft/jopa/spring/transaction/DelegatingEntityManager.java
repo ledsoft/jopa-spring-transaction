@@ -1,12 +1,12 @@
-package cz.cvut.kbss.jopa.spring.transaction;
+package com.github.ledsoft.jopa.spring.transaction;
 
+import com.github.ledsoft.jopa.spring.exception.TransactionMissingException;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
 import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
 import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
-import cz.cvut.kbss.jopa.spring.exception.TransactionMissingException;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 import org.springframework.beans.factory.DisposableBean;
 
