@@ -11,6 +11,7 @@
     <description>
         Integration of JOPA with Spring declarative transactions.
     </description>
+    <url>https://github.com/ledsoft/jopa-spring-transaction</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -209,4 +210,20 @@
         <url>https://github.com/ledsoft/jopa-spring-transaction.git</url>
         <connection>scm:git:https://github.com/ledsoft/jopa-spring-transaction.git</connection>
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <site>
+            <id>github</id>
+            <name>JOPA-Spring-transaction</name>
+            <url>https://github.com/ledsoft/jopa-spring-transaction</url>
+        </site>
+    </distributionManagement>
 </project>

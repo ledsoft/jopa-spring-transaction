@@ -50,6 +50,18 @@ private EntityManager em;
 
 See the tests for a complete setup example.
 
+## Getting the Library
+
+The library is now available in [Maven central](http://search.maven.org/#search%7Cga%7C1%7Corg.github.ledsoft),
+so getting it is just a matter of adding a Maven dependency:
+
+```xml
+<dependency>
+    <groupId>com.github.ledsoft</groupId>
+    <artifactId>jopa-spring-transaction</artifactId>
+</dependency>
+```
+
 ## JOPA
 
 See [https://github.com/kbss-cvut/jopa](https://github.com/kbss-cvut/jopa).
