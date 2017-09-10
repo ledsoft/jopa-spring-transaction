@@ -5,6 +5,8 @@ Integration of JOPA transactions into the Spring declarative transactions - the 
 ### Notes
 
 - Isolation level configuration is currently not supported, because it is not supported by JOPA either.
+- When a method is not transactional, the library with create an `EntityManager` instance, which will
+be automatically closed after one operation/query execution.
 
 ## Usage
 

@@ -1,17 +1,19 @@
 package com.github.ledsoft.jopa.spring.transaction;
 
-import com.github.ledsoft.jopa.spring.exception.TransactionMissingException;
 import com.github.ledsoft.jopa.spring.transaction.model.Person;
 import cz.cvut.kbss.jopa.model.EntityManager;
+import cz.cvut.kbss.jopa.model.EntityManagerFactory;
+import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 
+import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class DelegatingEntityManagerTest {
 
@@ -31,9 +33,42 @@ public class DelegatingEntityManagerTest {
     }
 
     @Test
-    public void throwsTransactionMissingExceptionWhenTransactionIsNotAssociatedWithThread() {
-        thrown.expect(TransactionMissingException.class);
-        sut.persist(new Person());
+    public void findOpensNonTransactionalManagerToPerformOperation() throws Exception {
+        final EntityManager em = mock(EntityManager.class);
+        final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
+        when(emfMock.createEntityManager()).thenReturn(em);
+        final URI uri = URI.create("http://www.example.org/PersonOne");
+        final Person instance = new Person();
+        when(em.find(Person.class, uri)).thenReturn(instance);
+        sut.setEntityManagerProvider(new EntityManagerProvider(emfMock));
+
+        final Person p = sut.find(Person.class, uri);
+        assertSame(instance, p);
+        verify(em).close();
+    }
+
+    @Test
+    public void getEntityManagerFactoryDoesNotRequireTransactionalEntityManager() {
+        final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
+        final EntityManagerProvider provider = spy(new EntityManagerProvider(emfMock));
+        sut.setEntityManagerProvider(provider);
+        final EntityManagerFactory result = sut.getEntityManagerFactory();
+        assertSame(emfMock, result);
+        verify(provider).getEntityManagerFactory();
+        verify(provider, never()).createEntityManager();
+    }
+
+    @Test
+    public void getMetamodelDoesNotRequireTransactionalEntityManager() {
+        final Metamodel metamodelMock = mock(Metamodel.class);
+        final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
+        when(emfMock.getMetamodel()).thenReturn(metamodelMock);
+        final EntityManagerProvider provider = spy(new EntityManagerProvider(emfMock));
+        sut.setEntityManagerProvider(provider);
+        final Metamodel result = sut.getMetamodel();
+        assertSame(metamodelMock, result);
+        verify(provider).getEntityManagerFactory();
+        verify(provider, never()).createEntityManager();
     }
 
     @Test

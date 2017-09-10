@@ -1,6 +1,6 @@
 package com.github.ledsoft.jopa.spring.transaction;
 
-import com.github.ledsoft.jopa.spring.exception.TransactionMissingException;
+import cz.cvut.kbss.jopa.exceptions.TransactionRequiredException;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
@@ -20,37 +20,50 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
 
     private final ThreadLocal<JopaTransactionDefinition> localTransaction = new ThreadLocal<>();
 
+    private EntityManagerProvider emProvider;
+
     @Override
     public void persist(Object o) {
-        getTransactionalDelegate().persist(o);
+        getRequiredTransactionalDelegate("persist").persist(o);
     }
 
     private EntityManager getTransactionalDelegate() {
-        final JopaTransactionDefinition currentTransaction = localTransaction.get();
-        if (currentTransaction == null) {
-            throw new TransactionMissingException("Expected transaction, but found none.");
+        if (hasTransactionalDelegate()) {
+            return localTransaction.get().getTransactionEntityManager();
         }
-        return currentTransaction.getTransactionEntityManager();
+        return emProvider.createEntityManager();
+    }
+
+    private boolean hasTransactionalDelegate() {
+        return localTransaction.get() != null;
+    }
+
+    private EntityManager getRequiredTransactionalDelegate(String methodName) {
+        if (!hasTransactionalDelegate()) {
+            throw new TransactionRequiredException(
+                    "Transaction required when calling " + methodName + " on container-managed entity manager.");
+        }
+        return localTransaction.get().getTransactionEntityManager();
     }
 
     @Override
     public void persist(Object o, Descriptor descriptor) {
-        getTransactionalDelegate().persist(o, descriptor);
+        getRequiredTransactionalDelegate("persist").persist(o, descriptor);
     }
 
     @Override
     public <T> T merge(T t) {
-        return getTransactionalDelegate().merge(t);
+        return getRequiredTransactionalDelegate("merge").merge(t);
     }
 
     @Override
     public <T> T merge(T t, Descriptor descriptor) {
-        return getTransactionalDelegate().merge(t, descriptor);
+        return getRequiredTransactionalDelegate("merge").merge(t, descriptor);
     }
 
     @Override
     public void remove(Object o) {
-        getTransactionalDelegate().remove(o);
+        getRequiredTransactionalDelegate("remove").remove(o);
     }
 
     @Override
@@ -65,12 +78,12 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
 
     @Override
     public void flush() {
-        getTransactionalDelegate().flush();
+        getRequiredTransactionalDelegate("flush").flush();
     }
 
     @Override
     public void refresh(Object o) {
-        getTransactionalDelegate().refresh(o);
+        getRequiredTransactionalDelegate("refresh").refresh(o);
     }
 
     @Override
@@ -150,7 +163,10 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
 
     @Override
     public EntityManagerFactory getEntityManagerFactory() {
-        return getTransactionalDelegate().getEntityManagerFactory();
+        if (hasTransactionalDelegate()) {
+            localTransaction.get().getTransactionEntityManager().getEntityManagerFactory();
+        }
+        return emProvider.getEntityManagerFactory();
     }
 
     @Override
@@ -160,7 +176,10 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
 
     @Override
     public Metamodel getMetamodel() {
-        return getTransactionalDelegate().getMetamodel();
+        if (hasTransactionalDelegate()) {
+            localTransaction.get().getTransactionEntityManager().getMetamodel();
+        }
+        return emProvider.getEntityManagerFactory().getMetamodel();
     }
 
     @Override
@@ -196,6 +215,10 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
      */
     void clearLocalTransaction() {
         localTransaction.remove();
+    }
+
+    void setEntityManagerProvider(EntityManagerProvider emProvider) {
+        this.emProvider = emProvider;
     }
 
     @Override
