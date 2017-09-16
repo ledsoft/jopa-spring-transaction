@@ -51,7 +51,8 @@ private EntityManager em;
 ```
 
 The tests contain a complete setup. For a fully operational example, see 
-[JOPA Example 04 - JOPA + Spring](https://github.com/kbss-cvut/jopa-examples/tree/master/example04-jopa-spring).
+[JOPA Example 04 - JOPA + Spring](https://github.com/kbss-cvut/jopa-examples/tree/master/example04-jopa-spring) and the
+[JSON-LD demo](https://github.com/kbss-cvut/jopa-examples/tree/master/jsonld).
 
 ## Getting the Library
 
