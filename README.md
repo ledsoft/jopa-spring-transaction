@@ -56,7 +56,7 @@ The tests contain a complete setup. For a fully operational example, see
 
 ## Getting the Library
 
-The library is now available in [Maven central](http://search.maven.org/#search%7Cga%7C1%7Corg.github.ledsoft),
+The library is now available in [Maven central](http://search.maven.org/#search%7Cga%7C1%7Ccom.github.ledsoft),
 so getting it is just a matter of adding a Maven dependency:
 
 ```xml
