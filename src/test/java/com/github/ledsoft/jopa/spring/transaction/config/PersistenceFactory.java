@@ -26,11 +26,6 @@ public class PersistenceFactory {
         return emf;
     }
 
-    @Bean
-    public EntityManager entityManager() {
-        return new DelegatingEntityManager();
-    }
-
     @PostConstruct
     private void init() {
         final Map<String, String> properties = new HashMap<>();

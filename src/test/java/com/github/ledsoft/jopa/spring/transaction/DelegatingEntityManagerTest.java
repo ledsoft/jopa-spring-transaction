@@ -33,7 +33,7 @@ public class DelegatingEntityManagerTest {
     }
 
     @Test
-    public void findOpensNonTransactionalManagerToPerformOperation() throws Exception {
+    public void findOpensNonTransactionalManagerToPerformOperation() {
         final EntityManager em = mock(EntityManager.class);
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
         when(emfMock.createEntityManager()).thenReturn(em);

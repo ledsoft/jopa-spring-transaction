@@ -137,6 +137,11 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
     }
 
     @Override
+    public Query createNativeQuery(String sparqlString, String resultSetMapping) {
+        return getTransactionalDelegate().createNativeQuery(sparqlString, resultSetMapping);
+    }
+
+    @Override
     public <T> T unwrap(Class<T> aClass) {
         return getTransactionalDelegate().unwrap(aClass);
     }

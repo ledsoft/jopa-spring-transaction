@@ -49,12 +49,28 @@ public class EntityManagerClosingQueryProxy implements Query {
 
     @Override
     public Query setMaxResults(int i) {
-        return delegate.setMaxResults(i);
+        delegate.setMaxResults(i);
+        return this;
     }
 
     @Override
     public int getMaxResults() {
         return delegate.getMaxResults();
+    }
+
+    @Override
+    public Query setFirstResult(int i) {
+        delegate.setFirstResult(i);
+        return this;
+    }
+
+    @Override
+    public int getFirstResult() {
+        try {
+            return delegate.getFirstResult();
+        } finally {
+            em.close();
+        }
     }
 
     @Override
@@ -99,26 +115,49 @@ public class EntityManagerClosingQueryProxy implements Query {
 
     @Override
     public Query setParameter(int index, String paramName, String language) {
-        return delegate.setParameter(index, paramName, language);
+        delegate.setParameter(index, paramName, language);
+        return this;
     }
 
     @Override
     public Query setParameter(String paramName, Object paramValue) {
-        return delegate.setParameter(paramName, paramValue);
+        delegate.setParameter(paramName, paramValue);
+        return this;
     }
 
     @Override
     public Query setParameter(String paramName, String paramValue, String language) {
-        return delegate.setParameter(paramName, paramValue, language);
+        delegate.setParameter(paramName, paramValue, language);
+        return this;
     }
 
     @Override
     public <T> Query setParameter(Parameter<T> parameter, T value) {
-        return delegate.setParameter(parameter, value);
+        delegate.setParameter(parameter, value);
+        return this;
     }
 
     @Override
     public Query setParameter(Parameter<String> parameter, String value, String language) {
-        return delegate.setParameter(parameter, value, language);
+        delegate.setParameter(parameter, value, language);
+        return this;
+    }
+
+    @Override
+    public Query setUntypedParameter(int index, Object paramValue) {
+        delegate.setUntypedParameter(index, paramValue);
+        return this;
+    }
+
+    @Override
+    public Query setUntypedParameter(String paramName, Object paramValue) {
+        delegate.setUntypedParameter(paramName, paramValue);
+        return this;
+    }
+
+    @Override
+    public <T> Query setUntypedParameter(Parameter<T> parameter, T paramValue) {
+        delegate.setUntypedParameter(parameter, paramValue);
+        return this;
     }
 }

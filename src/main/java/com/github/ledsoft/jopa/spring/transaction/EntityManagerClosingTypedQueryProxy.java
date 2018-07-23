@@ -47,7 +47,23 @@ class EntityManagerClosingTypedQueryProxy<X> implements TypedQuery<X> {
 
     @Override
     public TypedQuery<X> setMaxResults(int max) {
-        return delegate.setMaxResults(max);
+        delegate.setMaxResults(max);
+        return this;
+    }
+
+    @Override
+    public TypedQuery<X> setFirstResult(int index) {
+        delegate.setFirstResult(index);
+        return this;
+    }
+
+    @Override
+    public int getFirstResult() {
+        try {
+            return delegate.getFirstResult();
+        } finally {
+            em.close();
+        }
     }
 
     @Override
@@ -92,36 +108,61 @@ class EntityManagerClosingTypedQueryProxy<X> implements TypedQuery<X> {
 
     @Override
     public TypedQuery<X> setParameter(int index, Object value) {
-        return delegate.setParameter(index, value);
+        delegate.setParameter(index, value);
+        return this;
     }
 
     @Override
     public TypedQuery<X> setParameter(int index, String value, String language) {
-        return delegate.setParameter(index, value, language);
+        delegate.setParameter(index, value, language);
+        return this;
     }
 
     @Override
     public TypedQuery<X> setParameter(String paramName, Object value) {
-        return delegate.setParameter(paramName, value);
+        delegate.setParameter(paramName, value);
+        return this;
     }
 
     @Override
     public TypedQuery<X> setParameter(String paramName, String value, String language) {
-        return delegate.setParameter(paramName, value, language);
+        delegate.setParameter(paramName, value, language);
+        return this;
     }
 
     @Override
     public <T> TypedQuery<X> setParameter(Parameter<T> parameter, T value) {
-        return delegate.setParameter(parameter, value);
+        delegate.setParameter(parameter, value);
+        return this;
     }
 
     @Override
     public TypedQuery<X> setParameter(Parameter<String> parameter, String value, String language) {
-        return delegate.setParameter(parameter, value, language);
+        delegate.setParameter(parameter, value, language);
+        return this;
+    }
+
+    @Override
+    public TypedQuery<X> setUntypedParameter(int paramIndex, Object paramValue) {
+        delegate.setUntypedParameter(paramIndex, paramValue);
+        return this;
+    }
+
+    @Override
+    public TypedQuery<X> setUntypedParameter(String paramName, Object paramValue) {
+        delegate.setUntypedParameter(paramName, paramValue);
+        return this;
+    }
+
+    @Override
+    public <T> TypedQuery<X> setUntypedParameter(Parameter<T> parameter, T paramValue) {
+        delegate.setUntypedParameter(parameter, paramValue);
+        return this;
     }
 
     @Override
     public TypedQuery<X> setDescriptor(Descriptor descriptor) {
-        return delegate.setDescriptor(descriptor);
+        delegate.setDescriptor(descriptor);
+        return this;
     }
 }

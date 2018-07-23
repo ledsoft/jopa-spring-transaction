@@ -154,6 +154,12 @@ class SingleOperationEntityManagerProxy implements EntityManager {
     }
 
     @Override
+    public Query createNativeQuery(String sparqlString, String resultSetMapping) {
+        final Query instance = delegate.createNativeQuery(sparqlString, resultSetMapping);
+        return new EntityManagerClosingQueryProxy(instance, delegate);
+    }
+
+    @Override
     public <T> T unwrap(Class<T> aClass) {
         if (aClass.equals(this.getClass())) {
             return aClass.cast(this);

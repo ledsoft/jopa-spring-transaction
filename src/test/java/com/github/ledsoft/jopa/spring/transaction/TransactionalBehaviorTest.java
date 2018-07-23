@@ -27,7 +27,7 @@ public class TransactionalBehaviorTest {
 
     @Test
     @Transactional("txManager")
-    public void transactionalMethodPersistsData() throws Exception {
+    public void transactionalMethodPersistsData() {
         final Person p = new Person("Catherine Halsey");
         p.addPhone(new Phone("123 456 789"));
         p.addPhone(new Phone("987 654 321"));
