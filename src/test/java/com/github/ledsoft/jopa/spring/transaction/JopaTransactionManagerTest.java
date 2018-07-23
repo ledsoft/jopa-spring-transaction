@@ -1,18 +1,27 @@
 package com.github.ledsoft.jopa.spring.transaction;
 
+import cz.cvut.kbss.jopa.exceptions.RollbackException;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class JopaTransactionManagerTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Mock
     private EntityManagerFactory emfMock;
@@ -119,5 +128,17 @@ public class JopaTransactionManagerTest {
         emProxy.setLocalTransaction(txOne);
         txManager.doSetRollbackOnly(new DefaultTransactionStatus(txOne, false, false, false, false, null));
         verify(etMock).setRollbackOnly();
+    }
+
+    @Test
+    public void exceptionOnCommitClearsTransactionStatusAndThrowsTransactionException() {
+        final JopaTransactionDefinition txOne = txManager.doGetTransaction();
+        txOne.setTransactionEntityManager(emMock);
+        doThrow(new RollbackException("Error!")).when(etMock).commit();
+        thrown.expect(TransactionSystemException.class);
+        thrown.expectCause(is(instanceOf(RollbackException.class)));
+        thrown.expectMessage("Unable to commit JOPA entity transaction!");
+        txManager.doCommit(new DefaultTransactionStatus(txOne, false, false, false, false, null));
+        verify(etMock, never()).rollback();
     }
 }

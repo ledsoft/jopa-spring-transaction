@@ -1,9 +1,12 @@
 package com.github.ledsoft.jopa.spring.transaction;
 
+import cz.cvut.kbss.jopa.exceptions.RollbackException;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
+import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
@@ -38,7 +41,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition transactionDefinition) throws
-                                                                                            TransactionException {
+            TransactionException {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         if (!txObject.isExisting()) {
             if (logger.isTraceEnabled()) {
@@ -62,8 +65,12 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
             logger.debug("Commencing transaction commit.");
         }
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) status.getTransaction();
-        final EntityManager em = txObject.getTransactionEntityManager();
-        em.getTransaction().commit();
+        try {
+            final EntityTransaction tx = txObject.getTransactionEntityManager().getTransaction();
+            tx.commit();
+        } catch (RollbackException e) {
+            throw new TransactionSystemException("Unable to commit JOPA entity transaction!", e);
+        }
     }
 
     @Override
