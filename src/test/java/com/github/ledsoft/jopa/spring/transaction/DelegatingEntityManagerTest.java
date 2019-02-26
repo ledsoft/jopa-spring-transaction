@@ -88,6 +88,21 @@ public class DelegatingEntityManagerTest {
         verify(emTwo).contains(any());
     }
 
+    @Test
+    public void getReferenceDelegatesCallToNonTransactionalEntityManager() {
+        final EntityManager em = mock(EntityManager.class);
+        final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
+        when(emfMock.createEntityManager()).thenReturn(em);
+        final URI uri = URI.create("http://www.example.org/PersonOne");
+        final Person instance = new Person();
+        when(em.getReference(Person.class, uri)).thenReturn(instance);
+        sut.setEntityManagerProvider(new EntityManagerProvider(emfMock));
+        sut.setLocalTransaction(new JopaTransactionDefinition(em));
+
+        final Person p = sut.getReference(Person.class, uri);
+        assertSame(instance, p);
+    }
+
     private class TestTransaction implements Runnable {
 
         private EntityManager em;

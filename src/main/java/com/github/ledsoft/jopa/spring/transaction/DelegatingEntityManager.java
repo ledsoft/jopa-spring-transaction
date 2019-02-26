@@ -67,13 +67,23 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
     }
 
     @Override
-    public <T> T find(Class<T> aClass, Object o) {
-        return getTransactionalDelegate().find(aClass, o);
+    public <T> T find(Class<T> aClass, Object identifier) {
+        return getTransactionalDelegate().find(aClass, identifier);
     }
 
     @Override
-    public <T> T find(Class<T> aClass, Object o, Descriptor descriptor) {
-        return getTransactionalDelegate().find(aClass, o, descriptor);
+    public <T> T find(Class<T> aClass, Object identifier, Descriptor descriptor) {
+        return getTransactionalDelegate().find(aClass, identifier, descriptor);
+    }
+
+    @Override
+    public <T> T getReference(Class<T> targetClass, Object identifier) {
+        return getTransactionalDelegate().getReference(targetClass, identifier);
+    }
+
+    @Override
+    public <T> T getReference(Class<T> targetClass, Object identifier, Descriptor descriptor) {
+        return getTransactionalDelegate().getReference(targetClass, identifier, descriptor);
     }
 
     @Override

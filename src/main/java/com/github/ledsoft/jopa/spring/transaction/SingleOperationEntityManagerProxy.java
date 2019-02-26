@@ -72,6 +72,24 @@ class SingleOperationEntityManagerProxy implements EntityManager {
     }
 
     @Override
+    public <T> T getReference(Class<T> aClass, Object identifier) {
+        try {
+            return delegate.getReference(aClass, identifier);
+        } finally {
+            delegate.close();
+        }
+    }
+
+    @Override
+    public <T> T getReference(Class<T> aClass, Object identifier, Descriptor descriptor) {
+        try {
+            return delegate.getReference(aClass, identifier, descriptor);
+        } finally {
+            delegate.close();
+        }
+    }
+
+    @Override
     public void flush() {
         throw transactionNotSupported();
     }
