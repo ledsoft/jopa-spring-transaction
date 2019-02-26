@@ -2,14 +2,14 @@ package com.github.ledsoft.jopa.spring.transaction;
 
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.query.Query;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-public class EntityManagerClosingQueryProxyTest {
+class EntityManagerClosingQueryProxyTest {
 
     @Mock
     private EntityManager emMock;
@@ -19,14 +19,14 @@ public class EntityManagerClosingQueryProxyTest {
 
     private EntityManagerClosingQueryProxy sut;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.initMocks(this);
         sut = new EntityManagerClosingQueryProxy(delegate, emMock);
     }
 
     @Test
-    public void executeUpdateClosesEntityManagerAfterExecution() {
+    void executeUpdateClosesEntityManagerAfterExecution() {
         sut.executeUpdate();
         final InOrder inOrder = Mockito.inOrder(delegate, emMock);
         inOrder.verify(delegate).executeUpdate();
@@ -34,7 +34,7 @@ public class EntityManagerClosingQueryProxyTest {
     }
 
     @Test
-    public void getResultListClosesEntityManager() {
+    void getResultListClosesEntityManager() {
         sut.getResultList();
         final InOrder inOrder = Mockito.inOrder(delegate, emMock);
         inOrder.verify(delegate).getResultList();
@@ -42,7 +42,7 @@ public class EntityManagerClosingQueryProxyTest {
     }
 
     @Test
-    public void getSingleResultClosesEntityManager() {
+    void getSingleResultClosesEntityManager() {
         sut.getSingleResult();
         final InOrder inOrder = Mockito.inOrder(delegate, emMock);
         inOrder.verify(delegate).getSingleResult();

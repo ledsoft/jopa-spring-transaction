@@ -1,15 +1,16 @@
 package com.github.ledsoft.jopa.spring.transaction;
 
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
-public class TransactionObjectFactoryTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class TransactionObjectFactoryTest {
 
     private TransactionObjectFactory factory = new TransactionObjectFactory();
 
     @Test
-    public void createTransactionProxyCreatesEmptyTransactionDefinition() {
+    void createTransactionProxyCreatesEmptyTransactionDefinition() {
         final JopaTransactionDefinition transaction = factory.createTransactionObject();
         assertNotNull(transaction);
         assertFalse(transaction.isExisting());

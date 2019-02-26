@@ -2,58 +2,50 @@ package com.github.ledsoft.jopa.spring.transaction;
 
 import com.github.ledsoft.jopa.spring.transaction.model.Person;
 import cz.cvut.kbss.jopa.exceptions.TransactionRequiredException;
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.CustomMatcher;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
-public class DelegatingEntityManagerTransactionalMethodsTest {
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-    @Parameterized.Parameters(name = "method: {0}")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {"persist", new Person()},
-                {"merge", new Person()},
-                {"remove", new Person()},
-                {"refresh", new Person()},
-                {"flush", null}
-        });
+class DelegatingEntityManagerTransactionalMethodsTest {
+
+    private static Stream<Arguments> data() {
+        return Stream.of(Arguments.of("persist", new Person()),
+                Arguments.of("merge", new Person()),
+                Arguments.of("remove", new Person()),
+                Arguments.of("refresh", new Person()),
+                Arguments.of("flush", null));
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private DelegatingEntityManager sut = new DelegatingEntityManager();
 
-    @Parameterized.Parameter
-    public String methodName;
-
-    @Parameterized.Parameter(1)
-    public Object argument;
-
-    @Test
-    public void transactionalMethodThrowsTransactionRequiredExceptionWhenInvokedWithoutTransaction() throws Exception {
-        thrown.expectCause(CoreMatchers.allOf(CoreMatchers.isA(TransactionRequiredException.class),
-                new CauseMessageMatcher(
-                        "Transaction required when calling " + methodName + " on container-managed entity manager.")));
+    @ParameterizedTest
+    @MethodSource("data")
+    void transactionalMethodThrowsTransactionRequiredExceptionWhenInvokedWithoutTransaction(String methodName,
+                                                                                            Object argument)
+            throws Exception {
+        final InvocationTargetException result;
         if (argument != null) {
             final Method m = sut.getClass().getDeclaredMethod(methodName, Object.class);
-            m.invoke(sut, argument);
+            result = assertThrows(InvocationTargetException.class, () -> m.invoke(sut, argument));
         } else {
             final Method m = sut.getClass().getDeclaredMethod(methodName);
-            m.invoke(sut);
+            result = assertThrows(InvocationTargetException.class, () -> m.invoke(sut));
         }
+        assertThat(result.getCause(), allOf(instanceOf(TransactionRequiredException.class), new CauseMessageMatcher(
+                "Transaction required when calling " + methodName + " on container-managed entity manager.")));
     }
 
-    private static final class CauseMessageMatcher extends CustomMatcher<TransactionRequiredException> {
+    private static final class CauseMessageMatcher extends CustomMatcher<Throwable> {
 
         private final String message;
 

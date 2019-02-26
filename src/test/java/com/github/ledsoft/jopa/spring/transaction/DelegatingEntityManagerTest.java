@@ -4,26 +4,21 @@ import com.github.ledsoft.jopa.spring.transaction.model.Person;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class DelegatingEntityManagerTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+class DelegatingEntityManagerTest {
 
     private DelegatingEntityManager sut = new DelegatingEntityManager();
 
     @Test
-    public void delegatesCallsToCurrentEntityManager() {
+    void delegatesCallsToCurrentEntityManager() {
         final EntityManager em = mock(EntityManager.class);
         sut.setLocalTransaction(new JopaTransactionDefinition(em));
 
@@ -33,7 +28,7 @@ public class DelegatingEntityManagerTest {
     }
 
     @Test
-    public void findOpensNonTransactionalManagerToPerformOperation() {
+    void findOpensNonTransactionalManagerToPerformOperation() {
         final EntityManager em = mock(EntityManager.class);
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
         when(emfMock.createEntityManager()).thenReturn(em);
@@ -48,7 +43,7 @@ public class DelegatingEntityManagerTest {
     }
 
     @Test
-    public void getEntityManagerFactoryDoesNotRequireTransactionalEntityManager() {
+    void getEntityManagerFactoryDoesNotRequireTransactionalEntityManager() {
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
         final EntityManagerProvider provider = spy(new EntityManagerProvider(emfMock));
         sut.setEntityManagerProvider(provider);
@@ -59,7 +54,7 @@ public class DelegatingEntityManagerTest {
     }
 
     @Test
-    public void getMetamodelDoesNotRequireTransactionalEntityManager() {
+    void getMetamodelDoesNotRequireTransactionalEntityManager() {
         final Metamodel metamodelMock = mock(Metamodel.class);
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
         when(emfMock.getMetamodel()).thenReturn(metamodelMock);
@@ -72,7 +67,7 @@ public class DelegatingEntityManagerTest {
     }
 
     @Test
-    public void twoThreadsWorkWithDifferentTransactionManagers() throws Exception {
+    void twoThreadsWorkWithDifferentTransactionManagers() throws Exception {
         final EntityManager emOne = mock(EntityManager.class);
         final EntityManager emTwo = mock(EntityManager.class);
         final CountDownLatch latch = new CountDownLatch(2);
@@ -89,7 +84,7 @@ public class DelegatingEntityManagerTest {
     }
 
     @Test
-    public void getReferenceDelegatesCallToNonTransactionalEntityManager() {
+    void getReferenceDelegatesCallToNonTransactionalEntityManager() {
         final EntityManager em = mock(EntityManager.class);
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
         when(emfMock.createEntityManager()).thenReturn(em);

@@ -4,24 +4,20 @@ import cz.cvut.kbss.jopa.exceptions.RollbackException;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class JopaTransactionManagerTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+class JopaTransactionManagerTest {
 
     @Mock
     private EntityManagerFactory emfMock;
@@ -36,8 +32,8 @@ public class JopaTransactionManagerTest {
 
     private JopaTransactionManager txManager;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.initMocks(this);
         when(emfMock.createEntityManager()).thenReturn(emMock);
         when(emMock.getTransaction()).thenReturn(etMock);
@@ -46,14 +42,14 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void doGetTransactionReturnsNewTransactionObjectWhenNoneExistsForCurrentThread() {
+    void doGetTransactionReturnsNewTransactionObjectWhenNoneExistsForCurrentThread() {
         final JopaTransactionDefinition tx = txManager.doGetTransaction();
         assertNotNull(tx);
         assertFalse(tx.isExisting());
     }
 
     @Test
-    public void doBeginCreatesTransactionalEntityManagerAndSetsItOnCurrentThread() {
+    void doBeginCreatesTransactionalEntityManagerAndSetsItOnCurrentThread() {
         final JopaTransactionDefinition txObject = txManager.doGetTransaction();
         txManager.doBegin(txObject, txObject);
         assertNotNull(emProxy.getLocalTransaction());
@@ -61,14 +57,14 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void doBeginStartsTransactionInTheTransactionalEntityManager() {
+    void doBeginStartsTransactionInTheTransactionalEntityManager() {
         final JopaTransactionDefinition txObject = txManager.doGetTransaction();
         txManager.doBegin(txObject, txObject);
         verify(etMock).begin();
     }
 
     @Test
-    public void doGetTransactionReturnsTransactionObjectWithExistingEntityManagerWhenItIsAlreadyBoundToCurrentThread() {
+    void doGetTransactionReturnsTransactionObjectWithExistingEntityManagerWhenItIsAlreadyBoundToCurrentThread() {
         final JopaTransactionDefinition tx = txManager.doGetTransaction();
         txManager.doBegin(tx, tx);
         assertNotNull(tx);
@@ -78,7 +74,7 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void doBeginStartsTransactionOnExistingThreadBoundEntityManager() {
+    void doBeginStartsTransactionOnExistingThreadBoundEntityManager() {
         final JopaTransactionDefinition txOne = txManager.doGetTransaction();
         emProxy.setLocalTransaction(txOne);
         txOne.setTransactionEntityManager(emMock);
@@ -89,7 +85,7 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void doCommitCommitsTransactionBoundToCurrentThread() {
+    void doCommitCommitsTransactionBoundToCurrentThread() {
         final JopaTransactionDefinition txOne = txManager.doGetTransaction();
         txOne.setTransactionEntityManager(emMock);
         txManager.doCommit(new DefaultTransactionStatus(txOne, false, false, false, false, null));
@@ -97,7 +93,7 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void doRollbackRollsBackTransactionBoundToCurrentThread() {
+    void doRollbackRollsBackTransactionBoundToCurrentThread() {
         final JopaTransactionDefinition txOne = txManager.doGetTransaction();
         txOne.setTransactionEntityManager(emMock);
         txManager.doRollback(new DefaultTransactionStatus(txOne, false, false, false, false, null));
@@ -105,7 +101,7 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void doCleanupAfterCompletionUnbindsEntityManagerAndClosesIt() {
+    void doCleanupAfterCompletionUnbindsEntityManagerAndClosesIt() {
         final JopaTransactionDefinition txOne = txManager.doGetTransaction();
         txOne.setTransactionEntityManager(emMock);
         emProxy.setLocalTransaction(txOne);
@@ -115,14 +111,14 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void isExistingReturnsTrueWhenTransactionIsRunning() {
+    void isExistingReturnsTrueWhenTransactionIsRunning() {
         final JopaTransactionDefinition txOne = txManager.doGetTransaction();
         txOne.setTransactionEntityManager(emMock);
         assertTrue(txManager.isExistingTransaction(txOne));
     }
 
     @Test
-    public void doSetRollbackOnlySetsRollbackOnlyStatusOnCurrentTransaction() {
+    void doSetRollbackOnlySetsRollbackOnlyStatusOnCurrentTransaction() {
         final JopaTransactionDefinition txOne = txManager.doGetTransaction();
         txOne.setTransactionEntityManager(emMock);
         emProxy.setLocalTransaction(txOne);
@@ -131,14 +127,14 @@ public class JopaTransactionManagerTest {
     }
 
     @Test
-    public void exceptionOnCommitClearsTransactionStatusAndThrowsTransactionException() {
+    void exceptionOnCommitClearsTransactionStatusAndThrowsTransactionException() {
         final JopaTransactionDefinition txOne = txManager.doGetTransaction();
         txOne.setTransactionEntityManager(emMock);
         doThrow(new RollbackException("Error!")).when(etMock).commit();
-        thrown.expect(TransactionSystemException.class);
-        thrown.expectCause(is(instanceOf(RollbackException.class)));
-        thrown.expectMessage("Unable to commit JOPA entity transaction!");
-        txManager.doCommit(new DefaultTransactionStatus(txOne, false, false, false, false, null));
+        final TransactionSystemException ex = assertThrows(TransactionSystemException.class,
+                () -> txManager.doCommit(new DefaultTransactionStatus(txOne, false, false, false, false, null)));
+        assertThat(ex.getCause(), instanceOf(RollbackException.class));
+        assertThat(ex.getMessage(), containsString("Unable to commit JOPA entity transaction!"));
         verify(etMock, never()).rollback();
     }
 }
