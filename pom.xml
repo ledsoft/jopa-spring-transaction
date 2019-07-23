@@ -18,8 +18,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <cz.cvut.kbss.jopa.version>0.12.0</cz.cvut.kbss.jopa.version>
-        <org.springframework.version>5.0.7.RELEASE</org.springframework.version>
+        <cz.cvut.kbss.jopa.version>0.13.0</cz.cvut.kbss.jopa.version>
+        <org.springframework.version>5.1.8.RELEASE</org.springframework.version>
 
         <org.junit.jupiter.version>5.2.0</org.junit.jupiter.version>
     </properties>
@@ -203,12 +203,12 @@
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjtools</artifactId>
-                        <version>1.9.2</version>
+                        <version>1.9.4</version>
                     </dependency>
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjrt</artifactId>
-                        <version>1.9.2</version>
+                        <version>1.9.4</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -232,7 +232,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.1</version>
+                <version>0.8.4</version>
                 <executions>
                     <execution>
                         <goals>

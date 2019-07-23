@@ -54,6 +54,8 @@ The tests contain a complete setup. For a fully operational example, see
 [JOPA Example 04 - JOPA + Spring](https://github.com/kbss-cvut/jopa-examples/tree/master/example04-jopa-spring) and the
 [JSON-LD demo](https://github.com/kbss-cvut/jopa-examples/tree/master/jsonld).
 
+A full-fledged information system using JOPA and declarative Spring transactions is [TermIt](https://github.com/kbss-cvut/termit).
+
 ## Getting the Library
 
 The library is now available in [Maven central](http://search.maven.org/#search%7Cga%7C1%7Ccom.github.ledsoft),
