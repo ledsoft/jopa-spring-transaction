@@ -9,6 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import static org.mockito.Mockito.*;
+
 class EntityManagerClosingQueryProxyTest {
 
     @Mock
@@ -46,6 +51,18 @@ class EntityManagerClosingQueryProxyTest {
         sut.getSingleResult();
         final InOrder inOrder = Mockito.inOrder(delegate, emMock);
         inOrder.verify(delegate).getSingleResult();
+        inOrder.verify(emMock).close();
+    }
+
+    @Test
+    void getResultStreamClosesEntityManagerAfterStreamProcessingIsDone() {
+        final Stream<Integer> resultStream = Stream.of(1, 2, 3, 4, 5);
+        final Consumer consumer = mock(Consumer.class);
+        when(delegate.getResultStream()).thenReturn(resultStream);
+        sut.getResultStream().forEach(consumer);
+        final InOrder inOrder = Mockito.inOrder(delegate, consumer, emMock);
+        inOrder.verify(delegate).getResultStream();
+        inOrder.verify(consumer, times(5)).accept(any());
         inOrder.verify(emMock).close();
     }
 }

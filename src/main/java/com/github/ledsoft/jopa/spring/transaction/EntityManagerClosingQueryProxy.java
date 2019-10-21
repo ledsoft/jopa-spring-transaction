@@ -6,6 +6,8 @@ import cz.cvut.kbss.jopa.model.query.Query;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Closes the EntityManager instance which created the delegate when query is finished.
@@ -159,5 +161,12 @@ public class EntityManagerClosingQueryProxy implements Query {
     public <T> Query setUntypedParameter(Parameter<T> parameter, T paramValue) {
         delegate.setUntypedParameter(parameter, paramValue);
         return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Stream getResultStream() {
+        final Stream wrappedStream = delegate.getResultStream();
+        return StreamSupport.stream(new EntityManagerClosingResultSpliterator(wrappedStream.spliterator(), em), false);
     }
 }

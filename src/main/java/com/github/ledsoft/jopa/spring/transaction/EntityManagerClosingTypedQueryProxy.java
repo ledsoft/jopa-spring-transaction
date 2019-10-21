@@ -7,6 +7,8 @@ import cz.cvut.kbss.jopa.model.query.TypedQuery;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 class EntityManagerClosingTypedQueryProxy<X> implements TypedQuery<X> {
 
@@ -164,5 +166,12 @@ class EntityManagerClosingTypedQueryProxy<X> implements TypedQuery<X> {
     public TypedQuery<X> setDescriptor(Descriptor descriptor) {
         delegate.setDescriptor(descriptor);
         return this;
+    }
+
+    @Override
+    public Stream<X> getResultStream() {
+        final Stream<X> wrappedStream = delegate.getResultStream();
+        return StreamSupport
+                .stream(new EntityManagerClosingResultSpliterator<>(wrappedStream.spliterator(), em), false);
     }
 }

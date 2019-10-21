@@ -4,6 +4,7 @@ import com.github.ledsoft.jopa.spring.transaction.config.PersistenceConfig;
 import com.github.ledsoft.jopa.spring.transaction.model.Person;
 import com.github.ledsoft.jopa.spring.transaction.model.Phone;
 import cz.cvut.kbss.jopa.model.EntityManager;
+import cz.cvut.kbss.jopa.model.query.TypedQuery;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,5 +67,16 @@ public class TransactionalBehaviorTest {
         final Person p2 = new Person("Thomas Lasky");
         em.persist(p2);
         return p2;
+    }
+
+    @Test
+    void nonTransactionalQueryClosesEntityManagerAfterResultsAreProcessed() throws Exception {
+        final TypedQuery<Person> query = em.createNativeQuery("SELECT ?x WHERE {?x ?y ?z .}", Person.class);
+        final EntityManagerClosingTypedQueryProxy proxy = (EntityManagerClosingTypedQueryProxy) query;
+        final Field emField = EntityManagerClosingTypedQueryProxy.class.getDeclaredField("em");
+        emField.setAccessible(true);
+        final EntityManager delegateEm = (EntityManager) emField.get(proxy);
+        query.getResultStream().forEach(System.out::println);
+        assertFalse(delegateEm.isOpen());
     }
 }

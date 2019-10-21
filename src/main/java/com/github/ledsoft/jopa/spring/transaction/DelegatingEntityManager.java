@@ -197,21 +197,25 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
         return emProvider.getEntityManagerFactory().getMetamodel();
     }
 
+    @Deprecated
     @Override
     public void setUseTransactionalOntologyForQueryProcessing() {
         getTransactionalDelegate().setUseTransactionalOntologyForQueryProcessing();
     }
 
+    @Deprecated
     @Override
     public boolean useTransactionalOntologyForQueryProcessing() {
         return getTransactionalDelegate().useTransactionalOntologyForQueryProcessing();
     }
 
+    @Deprecated
     @Override
     public void setUseBackupOntologyForQueryProcessing() {
         getTransactionalDelegate().setUseBackupOntologyForQueryProcessing();
     }
 
+    @Deprecated
     @Override
     public boolean useBackupOntologyForQueryProcessing() {
         return getTransactionalDelegate().useBackupOntologyForQueryProcessing();
@@ -237,7 +241,7 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
     }
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
         if (localTransaction.get() != null) {
             localTransaction.get().getTransactionEntityManager().close();
         }
