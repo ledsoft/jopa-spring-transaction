@@ -18,10 +18,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <cz.cvut.kbss.jopa.version>0.13.0</cz.cvut.kbss.jopa.version>
-        <org.springframework.version>5.1.8.RELEASE</org.springframework.version>
+        <cz.cvut.kbss.jopa.version>0.13.2</cz.cvut.kbss.jopa.version>
+        <org.springframework.version>5.2.0.RELEASE</org.springframework.version>
 
-        <org.junit.jupiter.version>5.2.0</org.junit.jupiter.version>
+        <org.junit.jupiter.version>5.5.2</org.junit.jupiter.version>
     </properties>
 
     <dependencies>
