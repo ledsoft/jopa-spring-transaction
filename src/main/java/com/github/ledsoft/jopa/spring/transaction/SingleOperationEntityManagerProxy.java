@@ -16,7 +16,7 @@ import java.util.List;
  * <p>
  * Operations requiring a transaction are not supported.
  */
-class SingleOperationEntityManagerProxy implements EntityManager {
+public class SingleOperationEntityManagerProxy implements EntityManager {
 
     private final EntityManager delegate;
 

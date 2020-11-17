@@ -20,7 +20,7 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
 
     private final ThreadLocal<JopaTransactionDefinition> localTransaction = new ThreadLocal<>();
 
-    private EntityManagerProvider emProvider;
+    private SinglePUEntityManagerProvider emProvider;
 
     @Override
     public void persist(Object o) {
@@ -236,7 +236,7 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
         localTransaction.remove();
     }
 
-    void setEntityManagerProvider(EntityManagerProvider emProvider) {
+    void setEntityManagerProvider(SinglePUEntityManagerProvider emProvider) {
         this.emProvider = emProvider;
     }
 

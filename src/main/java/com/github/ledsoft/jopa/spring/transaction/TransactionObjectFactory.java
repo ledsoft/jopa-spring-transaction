@@ -3,7 +3,7 @@ package com.github.ledsoft.jopa.spring.transaction;
 /**
  * Builds transaction representing objects.
  */
-class TransactionObjectFactory {
+public class TransactionObjectFactory {
 
     /**
      * Creates a new (default) transaction object.

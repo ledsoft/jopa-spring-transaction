@@ -4,21 +4,21 @@ import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 
 /**
- * Provides non-transactional entity manager instances.
+ * Provides access to JOPA persistence unit to transactional delegators.
  */
-class EntityManagerProvider {
+public interface EntityManagerProvider {
 
-    private final EntityManagerFactory emf;
+    /**
+     * Creates a fresh {@link EntityManager} instance.
+     *
+     * @return {@code EntityManager}
+     */
+    EntityManager createEntityManager();
 
-    EntityManagerProvider(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-
-    EntityManager createEntityManager() {
-        return new SingleOperationEntityManagerProxy(emf.createEntityManager());
-    }
-
-    EntityManagerFactory getEntityManagerFactory() {
-        return emf;
-    }
+    /**
+     * Returns the {@link EntityManagerFactory} representing the underlying persistence unit.
+     *
+     * @return
+     */
+    EntityManagerFactory getEntityManagerFactory();
 }

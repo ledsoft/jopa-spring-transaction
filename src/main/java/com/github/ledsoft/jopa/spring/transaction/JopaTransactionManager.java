@@ -27,7 +27,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
     public JopaTransactionManager(EntityManagerFactory emf, DelegatingEntityManager emProxy) {
         this.emf = emf;
         this.emProxy = emProxy;
-        emProxy.setEntityManagerProvider(new EntityManagerProvider(emf));
+        emProxy.setEntityManagerProvider(new SinglePUEntityManagerProvider(emf));
     }
 
     @Override

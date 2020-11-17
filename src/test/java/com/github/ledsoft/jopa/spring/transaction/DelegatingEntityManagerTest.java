@@ -35,7 +35,7 @@ class DelegatingEntityManagerTest {
         final URI uri = URI.create("http://www.example.org/PersonOne");
         final Person instance = new Person();
         when(em.find(Person.class, uri)).thenReturn(instance);
-        sut.setEntityManagerProvider(new EntityManagerProvider(emfMock));
+        sut.setEntityManagerProvider(new SinglePUEntityManagerProvider(emfMock));
 
         final Person p = sut.find(Person.class, uri);
         assertSame(instance, p);
@@ -45,7 +45,7 @@ class DelegatingEntityManagerTest {
     @Test
     void getEntityManagerFactoryDoesNotRequireTransactionalEntityManager() {
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
-        final EntityManagerProvider provider = spy(new EntityManagerProvider(emfMock));
+        final SinglePUEntityManagerProvider provider = spy(new SinglePUEntityManagerProvider(emfMock));
         sut.setEntityManagerProvider(provider);
         final EntityManagerFactory result = sut.getEntityManagerFactory();
         assertSame(emfMock, result);
@@ -58,7 +58,7 @@ class DelegatingEntityManagerTest {
         final Metamodel metamodelMock = mock(Metamodel.class);
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
         when(emfMock.getMetamodel()).thenReturn(metamodelMock);
-        final EntityManagerProvider provider = spy(new EntityManagerProvider(emfMock));
+        final SinglePUEntityManagerProvider provider = spy(new SinglePUEntityManagerProvider(emfMock));
         sut.setEntityManagerProvider(provider);
         final Metamodel result = sut.getMetamodel();
         assertSame(metamodelMock, result);
@@ -91,7 +91,7 @@ class DelegatingEntityManagerTest {
         final URI uri = URI.create("http://www.example.org/PersonOne");
         final Person instance = new Person();
         when(em.getReference(Person.class, uri)).thenReturn(instance);
-        sut.setEntityManagerProvider(new EntityManagerProvider(emfMock));
+        sut.setEntityManagerProvider(new SinglePUEntityManagerProvider(emfMock));
         sut.setLocalTransaction(new JopaTransactionDefinition(em));
 
         final Person p = sut.getReference(Person.class, uri);
