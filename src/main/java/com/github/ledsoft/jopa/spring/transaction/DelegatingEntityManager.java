@@ -20,7 +20,7 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
 
     private final ThreadLocal<JopaTransactionDefinition> localTransaction = new ThreadLocal<>();
 
-    private SinglePUEntityManagerProvider emProvider;
+    private EntityManagerProvider emProvider;
 
     @Override
     public void persist(Object o) {
@@ -221,22 +221,22 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
         return getTransactionalDelegate().useBackupOntologyForQueryProcessing();
     }
 
-    void setLocalTransaction(JopaTransactionDefinition transaction) {
+    public void setLocalTransaction(JopaTransactionDefinition transaction) {
         localTransaction.set(transaction);
     }
 
-    JopaTransactionDefinition getLocalTransaction() {
+    public JopaTransactionDefinition getLocalTransaction() {
         return localTransaction.get();
     }
 
     /**
      * Removes the transaction object bound to the current thread.
      */
-    void clearLocalTransaction() {
+    public void clearLocalTransaction() {
         localTransaction.remove();
     }
 
-    void setEntityManagerProvider(SinglePUEntityManagerProvider emProvider) {
+    public void setEntityManagerProvider(EntityManagerProvider emProvider) {
         this.emProvider = emProvider;
     }
 

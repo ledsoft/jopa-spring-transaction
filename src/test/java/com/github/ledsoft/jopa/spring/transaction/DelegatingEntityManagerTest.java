@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 class DelegatingEntityManagerTest {
 
-    private DelegatingEntityManager sut = new DelegatingEntityManager();
+    private final DelegatingEntityManager sut = new DelegatingEntityManager();
 
     @Test
     void delegatesCallsToCurrentEntityManager() {
@@ -44,11 +44,9 @@ class DelegatingEntityManagerTest {
 
     @Test
     void getEntityManagerFactoryDoesNotRequireTransactionalEntityManager() {
-        final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
-        final SinglePUEntityManagerProvider provider = spy(new SinglePUEntityManagerProvider(emfMock));
+        final EntityManagerProvider provider = mock(EntityManagerProvider.class);
         sut.setEntityManagerProvider(provider);
-        final EntityManagerFactory result = sut.getEntityManagerFactory();
-        assertSame(emfMock, result);
+        sut.getEntityManagerFactory();
         verify(provider).getEntityManagerFactory();
         verify(provider, never()).createEntityManager();
     }
@@ -58,7 +56,8 @@ class DelegatingEntityManagerTest {
         final Metamodel metamodelMock = mock(Metamodel.class);
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
         when(emfMock.getMetamodel()).thenReturn(metamodelMock);
-        final SinglePUEntityManagerProvider provider = spy(new SinglePUEntityManagerProvider(emfMock));
+        final EntityManagerProvider provider = mock(EntityManagerProvider.class);
+        when(provider.getEntityManagerFactory()).thenReturn(emfMock);
         sut.setEntityManagerProvider(provider);
         final Metamodel result = sut.getMetamodel();
         assertSame(metamodelMock, result);
