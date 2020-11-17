@@ -20,7 +20,7 @@ public class SingleOperationEntityManagerProxy implements EntityManager {
 
     private final EntityManager delegate;
 
-    SingleOperationEntityManagerProxy(EntityManager delegate) {
+    public SingleOperationEntityManagerProxy(EntityManager delegate) {
         this.delegate = delegate;
     }
 
