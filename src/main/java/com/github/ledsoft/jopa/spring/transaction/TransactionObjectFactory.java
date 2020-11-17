@@ -10,7 +10,7 @@ public class TransactionObjectFactory {
      *
      * @return Instance representing a transaction
      */
-    JopaTransactionDefinition createTransactionObject() {
+    public JopaTransactionDefinition createTransactionObject() {
         return new JopaTransactionDefinition();
     }
 }
