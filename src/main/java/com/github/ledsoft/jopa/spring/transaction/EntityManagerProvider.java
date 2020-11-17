@@ -18,7 +18,7 @@ public interface EntityManagerProvider {
     /**
      * Returns the {@link EntityManagerFactory} representing the underlying persistence unit.
      *
-     * @return
+     * @return {@code EntityManagerFactory}
      */
     EntityManagerFactory getEntityManagerFactory();
 }
