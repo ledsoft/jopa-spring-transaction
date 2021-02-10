@@ -27,18 +27,18 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
         getRequiredTransactionalDelegate("persist").persist(o);
     }
 
-    private EntityManager getTransactionalDelegate() {
+    protected EntityManager getTransactionalDelegate() {
         if (hasTransactionalDelegate()) {
             return localTransaction.get().getTransactionEntityManager();
         }
         return emProvider.createEntityManager();
     }
 
-    private boolean hasTransactionalDelegate() {
+    protected boolean hasTransactionalDelegate() {
         return localTransaction.get() != null;
     }
 
-    private EntityManager getRequiredTransactionalDelegate(String methodName) {
+    protected EntityManager getRequiredTransactionalDelegate(String methodName) {
         if (!hasTransactionalDelegate()) {
             throw new TransactionRequiredException(
                     "Transaction required when calling " + methodName + " on container-managed entity manager.");
