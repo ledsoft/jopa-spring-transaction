@@ -55,7 +55,7 @@ class SingleOperationEntityManagerProxyTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         this.sut = new SingleOperationEntityManagerProxy(delegate);
     }
 

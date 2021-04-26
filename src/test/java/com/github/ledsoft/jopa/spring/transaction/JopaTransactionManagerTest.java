@@ -34,7 +34,7 @@ class JopaTransactionManagerTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         when(emfMock.createEntityManager()).thenReturn(emMock);
         when(emMock.getTransaction()).thenReturn(etMock);
         this.emProxy = new DelegatingEntityManager();
@@ -136,5 +136,13 @@ class JopaTransactionManagerTest {
         assertThat(ex.getCause(), instanceOf(RollbackException.class));
         assertThat(ex.getMessage(), containsString("Unable to commit JOPA entity transaction!"));
         verify(etMock, never()).rollback();
+    }
+
+    @Test
+    void doCommitRollsBackChangesInReadOnlyTransactionBoundToCurrentThread() {
+        final JopaTransactionDefinition txOne = txManager.doGetTransaction();
+        txOne.setTransactionEntityManager(emMock);
+        txManager.doCommit(new DefaultTransactionStatus(txOne, false, false, true, false, null));
+        verify(etMock).rollback();
     }
 }

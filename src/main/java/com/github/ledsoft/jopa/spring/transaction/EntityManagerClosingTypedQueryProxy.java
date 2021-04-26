@@ -171,7 +171,6 @@ class EntityManagerClosingTypedQueryProxy<X> implements TypedQuery<X> {
     @Override
     public Stream<X> getResultStream() {
         final Stream<X> wrappedStream = delegate.getResultStream();
-        return StreamSupport
-                .stream(new EntityManagerClosingResultSpliterator<>(wrappedStream.spliterator(), em), false);
+        return StreamSupport.stream(new EntityManagerClosingResultSpliterator<>(wrappedStream.spliterator(), em), false);
     }
 }

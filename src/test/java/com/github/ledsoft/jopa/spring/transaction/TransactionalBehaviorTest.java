@@ -72,7 +72,7 @@ public class TransactionalBehaviorTest {
     @Test
     void nonTransactionalQueryClosesEntityManagerAfterResultsAreProcessed() throws Exception {
         final TypedQuery<Person> query = em.createNativeQuery("SELECT ?x WHERE {?x ?y ?z .}", Person.class);
-        final EntityManagerClosingTypedQueryProxy proxy = (EntityManagerClosingTypedQueryProxy) query;
+        final EntityManagerClosingTypedQueryProxy<?> proxy = (EntityManagerClosingTypedQueryProxy<?>) query;
         final Field emField = EntityManagerClosingTypedQueryProxy.class.getDeclaredField("em");
         emField.setAccessible(true);
         final EntityManager delegateEm = (EntityManager) emField.get(proxy);

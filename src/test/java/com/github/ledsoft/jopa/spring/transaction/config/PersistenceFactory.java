@@ -29,7 +29,7 @@ public class PersistenceFactory {
     @PostConstruct
     private void init() {
         final Map<String, String> properties = new HashMap<>();
-        properties.put(OntoDriverProperties.ONTOLOGY_LANGUAGE, "en");
+        properties.put(JOPAPersistenceProperties.LANG, "en");
         properties.put(JOPAPersistenceProperties.SCAN_PACKAGE, "com.github.ledsoft.jopa.spring.transaction.model");
         properties.put(JOPAPersistenceProperties.CACHE_ENABLED, Boolean.FALSE.toString());
         properties.put(SesameOntoDriverProperties.SESAME_USE_VOLATILE_STORAGE, Boolean.TRUE.toString());

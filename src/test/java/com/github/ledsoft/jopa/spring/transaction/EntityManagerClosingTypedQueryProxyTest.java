@@ -27,7 +27,7 @@ class EntityManagerClosingTypedQueryProxyTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         this.sut = new EntityManagerClosingTypedQueryProxy<>(delegate, emMock);
     }
 

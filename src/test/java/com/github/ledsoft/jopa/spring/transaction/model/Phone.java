@@ -6,6 +6,7 @@ import cz.cvut.kbss.jopa.model.annotations.OWLClass;
 import cz.cvut.kbss.jopa.model.annotations.OWLDataProperty;
 
 import java.net.URI;
+import java.util.Objects;
 
 @Namespace(prefix = "ex", namespace = "http://www.example.org/")
 @OWLClass(iri = "ex:Phone")
@@ -44,18 +45,13 @@ public class Phone {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Phone phone = (Phone) o;
-
-        if (uri != null ? !uri.equals(phone.uri) : phone.uri != null) return false;
-        return number != null ? number.equals(phone.number) : phone.number == null;
+        return Objects.equals(uri, phone.uri) && Objects.equals(number, phone.number);
     }
 
     @Override
     public int hashCode() {
-        int result = uri != null ? uri.hashCode() : 0;
-        result = 31 * result + (number != null ? number.hashCode() : 0);
-        return result;
+        return Objects.hash(uri, number);
     }
 
     @Override

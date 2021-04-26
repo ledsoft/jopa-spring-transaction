@@ -67,7 +67,16 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) status.getTransaction();
         try {
             final EntityTransaction tx = txObject.getTransactionEntityManager().getTransaction();
-            tx.commit();
+            if (status.isReadOnly()) {
+                // This is a workaround
+                // A proper way would be to open the JOPA persistence context (PC) in a read-only mode, saving resources
+                // by not creating transactional clones and not calculating their changes
+                // At the end, the PC would just be thrown away
+                logger.trace("Transaction is readonly, rolling changes back.");
+                tx.rollback();
+            } else {
+                tx.commit();
+            }
         } catch (RollbackException e) {
             throw new TransactionSystemException("Unable to commit JOPA entity transaction!", e);
         }

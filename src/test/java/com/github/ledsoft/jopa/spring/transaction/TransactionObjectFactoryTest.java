@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TransactionObjectFactoryTest {
 
-    private TransactionObjectFactory factory = new TransactionObjectFactory();
+    private final TransactionObjectFactory factory = new TransactionObjectFactory();
 
     @Test
     void createTransactionProxyCreatesEmptyTransactionDefinition() {

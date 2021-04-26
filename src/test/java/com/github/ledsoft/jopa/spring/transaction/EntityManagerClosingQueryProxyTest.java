@@ -26,7 +26,7 @@ class EntityManagerClosingQueryProxyTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         sut = new EntityManagerClosingQueryProxy(delegate, emMock);
     }
 
@@ -57,7 +57,7 @@ class EntityManagerClosingQueryProxyTest {
     @Test
     void getResultStreamClosesEntityManagerAfterStreamProcessingIsDone() {
         final Stream<Integer> resultStream = Stream.of(1, 2, 3, 4, 5);
-        final Consumer consumer = mock(Consumer.class);
+        final Consumer<?> consumer = mock(Consumer.class);
         when(delegate.getResultStream()).thenReturn(resultStream);
         sut.getResultStream().forEach(consumer);
         final InOrder inOrder = Mockito.inOrder(delegate, consumer, emMock);
