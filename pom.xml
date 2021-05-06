@@ -6,7 +6,7 @@
 
     <groupId>com.github.ledsoft</groupId>
     <artifactId>jopa-spring-transaction</artifactId>
-    <version>0.0.12</version>
+    <version>0.1.0</version>
     <name>JOPA-Spring-transaction</name>
     <description>
         Integration of JOPA with Spring declarative transactions.
@@ -18,8 +18,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <cz.cvut.kbss.jopa.version>0.16.4</cz.cvut.kbss.jopa.version>
-        <org.springframework.version>5.3.4</org.springframework.version>
+        <cz.cvut.kbss.jopa.version>0.16.5</cz.cvut.kbss.jopa.version>
+        <org.springframework.version>5.3.6</org.springframework.version>
 
         <org.junit.jupiter.version>5.7.1</org.junit.jupiter.version>
     </properties>
