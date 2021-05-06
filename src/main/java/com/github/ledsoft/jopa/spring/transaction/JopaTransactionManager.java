@@ -41,7 +41,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition transactionDefinition) throws
-            TransactionException {
+                                                                                            TransactionException {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         if (!txObject.isExisting()) {
             if (logger.isTraceEnabled()) {
@@ -112,5 +112,21 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) status.getTransaction();
         final EntityManager em = txObject.getTransactionEntityManager();
         em.getTransaction().setRollbackOnly();
+    }
+
+    @Override
+    protected Object doSuspend(Object transaction) throws TransactionException {
+        final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
+        final EntityManager em = txObject.getTransactionEntityManager();
+        txObject.setTransactionEntityManager(null);
+        return em;
+    }
+
+    @Override
+    protected void doResume(Object transaction, Object suspendedResources) throws TransactionException {
+        final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
+        final EntityManager suspendedEm = (EntityManager) suspendedResources;
+        txObject.setTransactionEntityManager(suspendedEm);
+        emProxy.setLocalTransaction(txObject);
     }
 }

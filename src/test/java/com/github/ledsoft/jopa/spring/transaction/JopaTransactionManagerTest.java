@@ -145,4 +145,29 @@ class JopaTransactionManagerTest {
         txManager.doCommit(new DefaultTransactionStatus(txOne, false, false, true, false, null));
         verify(etMock).rollback();
     }
+
+    @Test
+    void doSuspendRemovesEntityManagerFromCurrentTransactionDefinition() {
+        final JopaTransactionDefinition txOne = txManager.doGetTransaction();
+        txOne.setTransactionEntityManager(emMock);
+        final Object result = txManager.doSuspend(txOne);
+        assertNull(txOne.getTransactionEntityManager());
+        assertSame(emMock, result);
+    }
+
+    @Test
+    void doResumeSetsProvidedSuspendedEntityManagerOnSpecifiedTransactionObject() {
+        final JopaTransactionDefinition txOne = txManager.doGetTransaction();
+        txManager.doResume(txOne, emMock);
+        assertSame(emMock, txOne.getTransactionEntityManager());
+    }
+
+    @Test
+    void doResumeEnsuresEntityManagerProxyContainsTransactionDefinition() {
+        final JopaTransactionDefinition txOne = txManager.doGetTransaction();
+        emProxy.clearLocalTransaction();
+        txManager.doResume(txOne, emMock);
+        assertTrue(emProxy.hasTransactionalDelegate());
+        assertEquals(txOne, emProxy.getLocalTransaction());
+    }
 }
