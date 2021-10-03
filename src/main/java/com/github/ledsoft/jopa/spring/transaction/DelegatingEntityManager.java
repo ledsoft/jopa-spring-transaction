@@ -7,11 +7,14 @@ import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
 import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
 import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
+import cz.cvut.kbss.jopa.model.query.criteria.CriteriaQuery;
+import cz.cvut.kbss.jopa.sessions.CriteriaBuilder;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 import org.springframework.beans.factory.DisposableBean;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Delegates calls to an {@link EntityManager} instance associated with the current thread.
@@ -117,8 +120,23 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
     }
 
     @Override
+    public Map<String, Object> getProperties() {
+        return getTransactionalDelegate().getProperties();
+    }
+
+    @Override
+    public void setProperty(String property, Object value) {
+        getTransactionalDelegate().setProperty(property, value);
+    }
+
+    @Override
     public Query createQuery(String s) {
         return getTransactionalDelegate().createQuery(s);
+    }
+
+    @Override
+    public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery) {
+        return getTransactionalDelegate().createQuery(criteriaQuery);
     }
 
     @Override
@@ -187,6 +205,11 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
     @Override
     public List<URI> getContexts() {
         return getTransactionalDelegate().getContexts();
+    }
+
+    @Override
+    public CriteriaBuilder getCriteriaBuilder() {
+        return getTransactionalDelegate().getCriteriaBuilder();
     }
 
     @Override

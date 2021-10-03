@@ -6,10 +6,13 @@ import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
 import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
 import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
+import cz.cvut.kbss.jopa.model.query.criteria.CriteriaQuery;
+import cz.cvut.kbss.jopa.sessions.CriteriaBuilder;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Entity manager proxy which closes the delegate after each operation.
@@ -136,9 +139,25 @@ public class SingleOperationEntityManagerProxy implements EntityManager {
     }
 
     @Override
+    public Map<String, Object> getProperties() {
+        return delegate.getProperties();
+    }
+
+    @Override
+    public void setProperty(String property, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Query createQuery(String query) {
         final Query instance = delegate.createQuery(query);
         return new EntityManagerClosingQueryProxy(instance, delegate);
+    }
+
+    @Override
+    public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery) {
+        final TypedQuery<T> instance = delegate.createQuery(criteriaQuery);
+        return new EntityManagerClosingTypedQueryProxy<>(instance, delegate);
     }
 
     @Override
@@ -221,6 +240,11 @@ public class SingleOperationEntityManagerProxy implements EntityManager {
         } finally {
             delegate.close();
         }
+    }
+
+    @Override
+    public CriteriaBuilder getCriteriaBuilder() {
+        return delegate.getCriteriaBuilder();
     }
 
     @Override

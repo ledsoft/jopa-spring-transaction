@@ -19,10 +19,10 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <cz.cvut.kbss.jopa.version>0.16.5</cz.cvut.kbss.jopa.version>
-        <org.springframework.version>5.3.6</org.springframework.version>
+        <cz.cvut.kbss.jopa.version>0.17.2</cz.cvut.kbss.jopa.version>
+        <org.springframework.version>5.3.10</org.springframework.version>
 
-        <org.junit.jupiter.version>5.7.1</org.junit.jupiter.version>
+        <org.junit.jupiter.version>5.8.1</org.junit.jupiter.version>
     </properties>
 
     <dependencies>
@@ -65,19 +65,19 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.6.0</version>
+            <version>3.12.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.30</version>
+            <version>1.7.32</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -113,7 +113,7 @@
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.1</version>
+            <version>1.3.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -192,9 +192,9 @@
             </plugin>
             <!-- This plugin is here only to make tests work, as they require AJC to process JOPA entity classes -->
             <plugin>
-                <groupId>com.nickwongdev</groupId>
+                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.12.6</version>
+                <version>1.14.0</version>
                 <configuration>
                     <complianceLevel>${java.version}</complianceLevel>
                     <source>${java.version}</source>
@@ -210,12 +210,12 @@
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjtools</artifactId>
-                        <version>1.9.6</version>
+                        <version>1.9.7</version>
                     </dependency>
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjrt</artifactId>
-                        <version>1.9.6</version>
+                        <version>1.9.7</version>
                     </dependency>
                 </dependencies>
                 <executions>
