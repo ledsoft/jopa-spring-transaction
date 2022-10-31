@@ -5,6 +5,7 @@ import cz.cvut.kbss.jopa.model.query.Parameter;
 import cz.cvut.kbss.jopa.model.query.Query;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -161,6 +162,17 @@ public class EntityManagerClosingQueryProxy implements Query {
     public <T> Query setUntypedParameter(Parameter<T> parameter, T paramValue) {
         delegate.setUntypedParameter(parameter, paramValue);
         return this;
+    }
+
+    @Override
+    public Query setHint(String hint, Object value) {
+        delegate.setHint(hint, value);
+        return this;
+    }
+
+    @Override
+    public Map<String, Object> getHints() {
+        return delegate.getHints();
     }
 
     @SuppressWarnings("unchecked")

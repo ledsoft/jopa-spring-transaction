@@ -3,9 +3,11 @@ package com.github.ledsoft.jopa.spring.transaction;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
 import cz.cvut.kbss.jopa.model.query.Parameter;
+import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -160,6 +162,17 @@ class EntityManagerClosingTypedQueryProxy<X> implements TypedQuery<X> {
     public <T> TypedQuery<X> setUntypedParameter(Parameter<T> parameter, T paramValue) {
         delegate.setUntypedParameter(parameter, paramValue);
         return this;
+    }
+
+    @Override
+    public Query setHint(String hint, Object value) {
+        delegate.setHint(hint, value);
+        return this;
+    }
+
+    @Override
+    public Map<String, Object> getHints() {
+        return delegate.getHints();
     }
 
     @Override
