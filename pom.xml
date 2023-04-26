@@ -19,7 +19,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <cz.cvut.kbss.jopa.version>0.20.0</cz.cvut.kbss.jopa.version>
+        <cz.cvut.kbss.jopa.version>0.22.0</cz.cvut.kbss.jopa.version>
         <org.springframework.version>5.3.25</org.springframework.version>
 
         <org.junit.jupiter.version>5.9.1</org.junit.jupiter.version>
@@ -192,9 +192,9 @@
             </plugin>
             <!-- This plugin is here only to make tests work, as they require AJC to process JOPA entity classes -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>dev.aspectj</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.14.0</version>
+                <version>1.13.1</version>
                 <configuration>
                     <complianceLevel>${java.version}</complianceLevel>
                     <source>${java.version}</source>
