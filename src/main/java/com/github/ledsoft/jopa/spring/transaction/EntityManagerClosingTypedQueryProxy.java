@@ -3,7 +3,6 @@ package com.github.ledsoft.jopa.spring.transaction;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
 import cz.cvut.kbss.jopa.model.query.Parameter;
-import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
 
 import java.util.List;
@@ -165,7 +164,7 @@ class EntityManagerClosingTypedQueryProxy<X> implements TypedQuery<X> {
     }
 
     @Override
-    public Query setHint(String hint, Object value) {
+    public TypedQuery<X> setHint(String hint, Object value) {
         delegate.setHint(hint, value);
         return this;
     }

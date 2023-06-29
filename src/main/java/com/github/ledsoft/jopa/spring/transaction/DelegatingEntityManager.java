@@ -4,6 +4,7 @@ import cz.cvut.kbss.jopa.exceptions.TransactionRequiredException;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
+import cz.cvut.kbss.jopa.model.metamodel.FieldSpecification;
 import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
 import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
@@ -120,6 +121,11 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
     }
 
     @Override
+    public <T> boolean isInferred(T t, FieldSpecification<? super T, ?> fieldSpecification, Object o) {
+        return getRequiredTransactionalDelegate("isInferred").isInferred(t, fieldSpecification, o);
+    }
+
+    @Override
     public Map<String, Object> getProperties() {
         return getTransactionalDelegate().getProperties();
     }
@@ -218,30 +224,6 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
             localTransaction.get().getTransactionEntityManager().getMetamodel();
         }
         return emProvider.getEntityManagerFactory().getMetamodel();
-    }
-
-    @Deprecated
-    @Override
-    public void setUseTransactionalOntologyForQueryProcessing() {
-        getTransactionalDelegate().setUseTransactionalOntologyForQueryProcessing();
-    }
-
-    @Deprecated
-    @Override
-    public boolean useTransactionalOntologyForQueryProcessing() {
-        return getTransactionalDelegate().useTransactionalOntologyForQueryProcessing();
-    }
-
-    @Deprecated
-    @Override
-    public void setUseBackupOntologyForQueryProcessing() {
-        getTransactionalDelegate().setUseBackupOntologyForQueryProcessing();
-    }
-
-    @Deprecated
-    @Override
-    public boolean useBackupOntologyForQueryProcessing() {
-        return getTransactionalDelegate().useBackupOntologyForQueryProcessing();
     }
 
     public void setLocalTransaction(JopaTransactionDefinition transaction) {

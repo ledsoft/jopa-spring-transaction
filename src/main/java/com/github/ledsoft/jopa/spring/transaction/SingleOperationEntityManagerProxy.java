@@ -3,6 +3,7 @@ package com.github.ledsoft.jopa.spring.transaction;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
+import cz.cvut.kbss.jopa.model.metamodel.FieldSpecification;
 import cz.cvut.kbss.jopa.model.metamodel.Metamodel;
 import cz.cvut.kbss.jopa.model.query.Query;
 import cz.cvut.kbss.jopa.model.query.TypedQuery;
@@ -197,6 +198,15 @@ public class SingleOperationEntityManagerProxy implements EntityManager {
     }
 
     @Override
+    public <T> boolean isInferred(T t, FieldSpecification<? super T, ?> fieldSpecification, Object o) {
+        try {
+            return delegate.isInferred(t, fieldSpecification, o);
+        } finally {
+            delegate.close();
+        }
+    }
+
+    @Override
     public <T> T unwrap(Class<T> aClass) {
         if (aClass.equals(this.getClass())) {
             return aClass.cast(this);
@@ -250,25 +260,5 @@ public class SingleOperationEntityManagerProxy implements EntityManager {
     @Override
     public Metamodel getMetamodel() {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setUseTransactionalOntologyForQueryProcessing() {
-        // Do nothing, makes no sense in non-transactional EM
-    }
-
-    @Override
-    public boolean useTransactionalOntologyForQueryProcessing() {
-        return false;
-    }
-
-    @Override
-    public void setUseBackupOntologyForQueryProcessing() {
-        // Do nothing, makes no sense in non-transactional EM
-    }
-
-    @Override
-    public boolean useBackupOntologyForQueryProcessing() {
-        return false;
     }
 }
