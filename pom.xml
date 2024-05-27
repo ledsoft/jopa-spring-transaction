@@ -6,7 +6,7 @@
 
     <groupId>com.github.ledsoft</groupId>
     <artifactId>jopa-spring-transaction</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.0</version>
     <name>JOPA-Spring-transaction</name>
     <description>
         Integration of JOPA with Spring declarative transactions.
