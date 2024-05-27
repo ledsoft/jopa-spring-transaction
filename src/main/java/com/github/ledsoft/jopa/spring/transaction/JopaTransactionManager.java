@@ -4,6 +4,7 @@ import cz.cvut.kbss.jopa.exceptions.RollbackException;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.transactions.EntityTransaction;
+import org.springframework.lang.NonNull;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionSystemException;
@@ -30,6 +31,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         emProxy.setEntityManagerProvider(new SinglePUEntityManagerProvider(emf));
     }
 
+    @NonNull
     @Override
     protected JopaTransactionDefinition doGetTransaction() throws TransactionException {
         final JopaTransactionDefinition tx = txFactory.createTransactionObject();
@@ -40,7 +42,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
     }
 
     @Override
-    protected void doBegin(Object transaction, TransactionDefinition transactionDefinition) throws
+    protected void doBegin(@NonNull Object transaction, @NonNull TransactionDefinition transactionDefinition) throws
                                                                                             TransactionException {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         if (!txObject.isExisting()) {
@@ -60,7 +62,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
     }
 
     @Override
-    protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
+    protected void doCommit(@NonNull DefaultTransactionStatus status) throws TransactionException {
         if (logger.isDebugEnabled()) {
             logger.debug("Commencing transaction commit.");
         }
@@ -83,7 +85,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
     }
 
     @Override
-    protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
+    protected void doRollback(@NonNull DefaultTransactionStatus status) throws TransactionException {
         if (logger.isDebugEnabled()) {
             logger.debug("Commencing transaction rollback.");
         }
@@ -93,7 +95,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
     }
 
     @Override
-    protected void doCleanupAfterCompletion(Object transaction) {
+    protected void doCleanupAfterCompletion(@NonNull Object transaction) {
         if (logger.isTraceEnabled()) {
             logger.trace("Closing transactional EntityManager.");
         }
@@ -103,7 +105,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
     }
 
     @Override
-    protected boolean isExistingTransaction(Object transaction) throws TransactionException {
+    protected boolean isExistingTransaction(@NonNull Object transaction) throws TransactionException {
         return ((JopaTransactionDefinition) transaction).isExisting();
     }
 
@@ -114,8 +116,9 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         em.getTransaction().setRollbackOnly();
     }
 
+    @NonNull
     @Override
-    protected Object doSuspend(Object transaction) throws TransactionException {
+    protected Object doSuspend(@NonNull Object transaction) throws TransactionException {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         final EntityManager em = txObject.getTransactionEntityManager();
         txObject.setTransactionEntityManager(null);
@@ -123,7 +126,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
     }
 
     @Override
-    protected void doResume(Object transaction, Object suspendedResources) throws TransactionException {
+    protected void doResume(Object transaction, @NonNull Object suspendedResources) throws TransactionException {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         final EntityManager suspendedEm = (EntityManager) suspendedResources;
         txObject.setTransactionEntityManager(suspendedEm);
