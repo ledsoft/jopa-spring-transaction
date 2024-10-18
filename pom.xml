@@ -20,7 +20,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <cz.cvut.kbss.jopa.version>2.0.0</cz.cvut.kbss.jopa.version>
-        <org.springframework.version>6.1.8</org.springframework.version>
+        <org.springframework.version>6.1.14</org.springframework.version>
 
         <org.junit.jupiter.version>5.9.2</org.junit.jupiter.version>
         <org.mockito.version>5.3.1</org.mockito.version>
