@@ -11,6 +11,8 @@ import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
+import java.util.Map;
+
 /**
  * Integrates JOPA transactions into the Spring transactional management.
  * <p>
@@ -43,13 +45,14 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
 
     @Override
     protected void doBegin(@NonNull Object transaction, @NonNull TransactionDefinition transactionDefinition) throws
-                                                                                            TransactionException {
+            TransactionException {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         if (!txObject.isExisting()) {
             if (logger.isTraceEnabled()) {
                 logger.trace("Creating new transactional EntityManager.");
             }
-            final EntityManager em = emf.createEntityManager();
+            final EntityManager em = emf.createEntityManager(
+                    txObject.isReadOnly() ? Map.of("cz.cvut.kbss.jopa.transactionMode", "read_only") : Map.of());
             txObject.setTransactionEntityManager(em);
         }
         if (logger.isDebugEnabled()) {
@@ -69,16 +72,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) status.getTransaction();
         try {
             final EntityTransaction tx = txObject.getTransactionEntityManager().getTransaction();
-            if (status.isReadOnly()) {
-                // This is a workaround
-                // A proper way would be to open the JOPA persistence context (PC) in a read-only mode, saving resources
-                // by not creating transactional clones and not calculating their changes
-                // At the end, the PC would just be thrown away
-                logger.trace("Transaction is readonly, rolling changes back.");
-                tx.rollback();
-            } else {
-                tx.commit();
-            }
+            tx.commit();
         } catch (RollbackException e) {
             throw new TransactionSystemException("Unable to commit JOPA entity transaction!", e);
         }

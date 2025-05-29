@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
+import java.util.Map;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -59,7 +62,7 @@ class JopaTransactionManagerTest {
 
     @Test
     void doBeginCreatesTransactionalEntityManagerAndSetsItOnCurrentThread() {
-        when(emfMock.createEntityManager()).thenReturn(emMock);
+        when(emfMock.createEntityManager(any())).thenReturn(emMock);
         when(emMock.getTransaction()).thenReturn(etMock);
         final JopaTransactionDefinition txObject = txManager.doGetTransaction();
         txManager.doBegin(txObject, txObject);
@@ -69,7 +72,7 @@ class JopaTransactionManagerTest {
 
     @Test
     void doBeginStartsTransactionInTheTransactionalEntityManager() {
-        when(emfMock.createEntityManager()).thenReturn(emMock);
+        when(emfMock.createEntityManager(any())).thenReturn(emMock);
         when(emMock.getTransaction()).thenReturn(etMock);
         final JopaTransactionDefinition txObject = txManager.doGetTransaction();
         txManager.doBegin(txObject, txObject);
@@ -78,7 +81,7 @@ class JopaTransactionManagerTest {
 
     @Test
     void doGetTransactionReturnsTransactionObjectWithExistingEntityManagerWhenItIsAlreadyBoundToCurrentThread() {
-        when(emfMock.createEntityManager()).thenReturn(emMock);
+        when(emfMock.createEntityManager(any())).thenReturn(emMock);
         when(emMock.getTransaction()).thenReturn(etMock);
         final JopaTransactionDefinition tx = txManager.doGetTransaction();
         txManager.doBegin(tx, tx);
@@ -98,6 +101,16 @@ class JopaTransactionManagerTest {
         txManager.doBegin(txTwo, txTwo);
         verify(etMock).begin();
         verify(emfMock, never()).createEntityManager();
+    }
+
+    @Test
+    void doBeginRequestsReadOnlyEntityManagerWhenTransactionIsReadOnly() {
+        when(emfMock.createEntityManager(any())).thenReturn(emMock);
+        when(emMock.getTransaction()).thenReturn(etMock);
+        final JopaTransactionDefinition tx = txManager.doGetTransaction();
+        tx.setReadOnly(true);
+        txManager.doBegin(tx, tx);
+        verify(emfMock).createEntityManager(Map.of("cz.cvut.kbss.jopa.transactionMode", "read_only"));
     }
 
     @Test
@@ -161,17 +174,6 @@ class JopaTransactionManagerTest {
         assertThat(ex.getCause(), instanceOf(RollbackException.class));
         assertThat(ex.getMessage(), containsString("Unable to commit JOPA entity transaction!"));
         verify(etMock, never()).rollback();
-    }
-
-    @Test
-    void doCommitRollsBackChangesInReadOnlyTransactionBoundToCurrentThread() {
-        when(emMock.getTransaction()).thenReturn(etMock);
-        final JopaTransactionDefinition txOne = txManager.doGetTransaction();
-        txOne.setTransactionEntityManager(emMock);
-        final DefaultTransactionStatus txStatus =
-                new DefaultTransactionStatus("test", txOne, false, false, false, true, false, null);
-        txManager.doCommit(txStatus);
-        verify(etMock).rollback();
     }
 
     @Test
