@@ -6,7 +6,7 @@
 
     <groupId>com.github.ledsoft</groupId>
     <artifactId>jopa-spring-transaction</artifactId>
-    <version>0.3.1</version>
+    <version>0.4.0</version>
     <name>JOPA-Spring-transaction</name>
     <description>
         Integration of JOPA with Spring declarative transactions.
@@ -171,7 +171,7 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.5.0</version>
+                        <version>0.7.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
@@ -234,15 +234,11 @@
     </developers>
 
     <scm>
-        <url>https://github.com/ledsoft/jopa-spring-transaction.git</url>
-        <connection>scm:git:https://github.com/ledsoft/jopa-spring-transaction.git</connection>
+        <url>https://github.com/ledsoft/jopa-spring-transaction</url>
+        <connection>scm:git:git://github.com/ledsoft/jopa-spring-transaction.git</connection>
     </scm>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>

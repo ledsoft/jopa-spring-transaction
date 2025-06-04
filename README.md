@@ -4,16 +4,17 @@ Integration of JOPA transactions into the Spring declarative transactions - the 
 
 ### Notes
 
-- Isolation level configuration is currently not supported, because it is not supported by JOPA either.
+- Isolation level configuration is currently not supported because it is not supported by JOPA either.
 - When a method is not transactional, the library with create an `EntityManager` instance, which will
 be automatically closed after one operation/query execution.
+- Nested transactions are validated, so a read-write transaction cannot be nested in a read-only transaction.
 
 ## Usage
 
 Usage of the library is fairly simple. It is only necessary to instantiate the `JopaTransactionManager` 
 and `DelegatingEntityManager` Spring beans.
 - `JopaTransactionManager` implements Spring's `TransactionManager` interface and Spring calls it at significant
-moments of the transaction lifecycle (begin, commit etc.),
+moments of the transaction lifecycle (begin, commit, etc.),
 - `DelegatingEntityManager` implements JOPA's `EntityManager` interface and is injected into transactional Spring beans,
 where it delegates calls to the `EntityManager` instance bound to the current transaction. This is the only class with
 which the end users directly interact.
