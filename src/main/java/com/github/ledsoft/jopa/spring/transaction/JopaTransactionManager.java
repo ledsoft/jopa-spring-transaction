@@ -31,6 +31,7 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         this.emf = emf;
         this.emProxy = emProxy;
         emProxy.setEntityManagerProvider(new SinglePUEntityManagerProvider(emf));
+        setValidateExistingTransaction(true);
     }
 
     @NonNull
@@ -49,7 +50,11 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         if (!txObject.isExisting()) {
             if (logger.isTraceEnabled()) {
-                logger.trace("Creating new transactional EntityManager.");
+                if (txObject.isReadOnly()) {
+                    logger.trace("Creating new read-only transaction EntityManager.");
+                } else {
+                    logger.trace("Creating new transactional EntityManager.");
+                }
             }
             final EntityManager em = emf.createEntityManager(
                     txObject.isReadOnly() ? Map.of("cz.cvut.kbss.jopa.transactionMode", "read_only") : Map.of());

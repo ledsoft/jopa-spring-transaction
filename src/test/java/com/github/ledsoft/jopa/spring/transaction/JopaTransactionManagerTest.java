@@ -200,4 +200,10 @@ class JopaTransactionManagerTest {
         assertTrue(emProxy.hasTransactionalDelegate());
         assertEquals(txOne, emProxy.getLocalTransaction());
     }
+
+    @Test
+    void txManagerRequiresNestedTransactionValidation() {
+        // Existing transaction validation ensures that read-write transaction cannot be nested inside a read-only transaction
+        assertTrue(txManager.isValidateExistingTransaction());
+    }
 }
