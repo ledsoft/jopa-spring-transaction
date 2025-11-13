@@ -16,7 +16,7 @@ class SinglePUEntityManagerProvider implements EntityManagerProvider {
 
     @Override
     public EntityManager createEntityManager() {
-        return new SingleOperationEntityManagerProxy(emf.createEntityManager());
+        return new SingleOperationEntityManagerProxy(emf.createEntityManager(JopaTransactionManager.readOnlyProperties()));
     }
 
     @Override

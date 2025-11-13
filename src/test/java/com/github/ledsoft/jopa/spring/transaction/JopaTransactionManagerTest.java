@@ -80,6 +80,17 @@ class JopaTransactionManagerTest {
     }
 
     @Test
+    void doBeginSetsReadOnlyTransactionModeWhenTransactionDefinitionIsReadOnly() {
+        when(emfMock.createEntityManager(any())).thenReturn(emMock);
+        when(emMock.getTransaction()).thenReturn(etMock);
+        final JopaTransactionDefinition txObject = txManager.doGetTransaction();
+        final JopaTransactionDefinition txDef = new JopaTransactionDefinition();
+        txDef.setReadOnly(true);
+        txManager.doBegin(txObject, txDef);
+        verify(emfMock).createEntityManager(Map.of("cz.cvut.kbss.jopa.transactionMode", "read_only"));
+    }
+
+    @Test
     void doGetTransactionReturnsTransactionObjectWithExistingEntityManagerWhenItIsAlreadyBoundToCurrentThread() {
         when(emfMock.createEntityManager(any())).thenReturn(emMock);
         when(emMock.getTransaction()).thenReturn(etMock);

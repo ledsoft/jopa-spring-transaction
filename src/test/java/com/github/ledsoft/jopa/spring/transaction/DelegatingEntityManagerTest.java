@@ -31,7 +31,7 @@ class DelegatingEntityManagerTest {
     void findOpensNonTransactionalManagerToPerformOperation() {
         final EntityManager em = mock(EntityManager.class);
         final EntityManagerFactory emfMock = mock(EntityManagerFactory.class);
-        when(emfMock.createEntityManager()).thenReturn(em);
+        when(emfMock.createEntityManager(anyMap())).thenReturn(em);
         final URI uri = URI.create("http://www.example.org/PersonOne");
         final Person instance = new Person();
         when(em.find(Person.class, uri)).thenReturn(instance);
@@ -99,8 +99,8 @@ class DelegatingEntityManagerTest {
 
     private class TestTransaction implements Runnable {
 
-        private EntityManager em;
-        private CountDownLatch countDown;
+        private final EntityManager em;
+        private final CountDownLatch countDown;
 
         TestTransaction(EntityManager em, CountDownLatch countDown) {
             this.em = em;

@@ -50,14 +50,15 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         final JopaTransactionDefinition txObject = (JopaTransactionDefinition) transaction;
         if (!txObject.isExisting()) {
             if (logger.isTraceEnabled()) {
-                if (txObject.isReadOnly()) {
+                if (transactionDefinition.isReadOnly()) {
                     logger.trace("Creating new read-only transaction EntityManager.");
                 } else {
                     logger.trace("Creating new transactional EntityManager.");
                 }
             }
+            txObject.setReadOnly(transactionDefinition.isReadOnly());
             final EntityManager em = emf.createEntityManager(
-                    txObject.isReadOnly() ? Map.of("cz.cvut.kbss.jopa.transactionMode", "read_only") : Map.of());
+                    transactionDefinition.isReadOnly() ? readOnlyProperties() : Map.of());
             txObject.setTransactionEntityManager(em);
         }
         if (logger.isDebugEnabled()) {
@@ -67,6 +68,10 @@ public class JopaTransactionManager extends AbstractPlatformTransactionManager {
         em.getTransaction().begin();
         // Bind the transactional EM to the current thread
         emProxy.setLocalTransaction(txObject);
+    }
+
+    static Map<String, String> readOnlyProperties() {
+        return Map.of("cz.cvut.kbss.jopa.transactionMode", "read_only");
     }
 
     @Override
