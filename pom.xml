@@ -6,7 +6,7 @@
 
     <groupId>com.github.ledsoft</groupId>
     <artifactId>jopa-spring-transaction</artifactId>
-    <version>0.4.2</version>
+    <version>0.4.3</version>
     <name>JOPA-Spring-transaction</name>
     <description>
         Integration of JOPA with Spring declarative transactions.
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.18</version>
+            <version>1.5.21</version>
             <scope>test</scope>
         </dependency>
         <dependency>
