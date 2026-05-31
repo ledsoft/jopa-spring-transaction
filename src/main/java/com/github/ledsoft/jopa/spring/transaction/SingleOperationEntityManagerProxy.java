@@ -1,5 +1,6 @@
 package com.github.ledsoft.jopa.spring.transaction;
 
+import cz.cvut.kbss.jopa.model.EntityGraph;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
@@ -260,5 +261,15 @@ public class SingleOperationEntityManagerProxy implements EntityManager {
     @Override
     public Metamodel getMetamodel() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T> EntityGraph<T> createEntityGraph(Class<T> entityClass) {
+        return delegate.createEntityGraph(entityClass);
+    }
+
+    @Override
+    public EntityGraph<?> getEntityGraph(String graphName) {
+        return delegate.getEntityGraph(graphName);
     }
 }

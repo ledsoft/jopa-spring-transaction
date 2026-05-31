@@ -1,6 +1,7 @@
 package com.github.ledsoft.jopa.spring.transaction;
 
 import cz.cvut.kbss.jopa.exceptions.TransactionRequiredException;
+import cz.cvut.kbss.jopa.model.EntityGraph;
 import cz.cvut.kbss.jopa.model.EntityManager;
 import cz.cvut.kbss.jopa.model.EntityManagerFactory;
 import cz.cvut.kbss.jopa.model.descriptors.Descriptor;
@@ -224,6 +225,16 @@ public class DelegatingEntityManager implements DisposableBean, EntityManager {
             localTransaction.get().getTransactionEntityManager().getMetamodel();
         }
         return emProvider.getEntityManagerFactory().getMetamodel();
+    }
+
+    @Override
+    public <T> EntityGraph<T> createEntityGraph(Class<T> entityClass) {
+        return getTransactionalDelegate().createEntityGraph(entityClass);
+    }
+
+    @Override
+    public EntityGraph<?> getEntityGraph(String graphName) {
+        return getTransactionalDelegate().getEntityGraph(graphName);
     }
 
     public void setLocalTransaction(JopaTransactionDefinition transaction) {

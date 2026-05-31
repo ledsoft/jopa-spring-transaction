@@ -19,10 +19,10 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <cz.cvut.kbss.jopa.version>[2.5,3)</cz.cvut.kbss.jopa.version>
+        <cz.cvut.kbss.jopa.version>[2.10,3)</cz.cvut.kbss.jopa.version>
         <org.springframework.version>[6.0,6.9999)</org.springframework.version>
 
-        <org.junit.jupiter.version>5.14.0</org.junit.jupiter.version>
+        <org.junit.jupiter.version>5.14.4</org.junit.jupiter.version>
         <org.mockito.version>5.18.0</org.mockito.version>
     </properties>
 
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.21</version>
+            <version>1.5.32</version>
             <scope>test</scope>
         </dependency>
         <dependency>
